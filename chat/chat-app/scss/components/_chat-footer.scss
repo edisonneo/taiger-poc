@@ -1,0 +1,55 @@
+.chat-form-mobile {
+  width: 100%;
+  display: flex;
+
+  .input-box {
+    width: 100%;
+    font-size: 16px;
+    line-height: 32px;
+    padding: 0px;
+
+    // hide the nasty 'X' clear button on IE10+
+    &::-ms-clear {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+  }
+
+  .btn-left {
+    padding-right: 10px;
+  }
+
+  .btn-right {
+    margin-left: 8px;
+  }
+
+  .item-input-inset {
+    padding: 0;
+    width: 100%;
+  }
+}
+
+// wrapper of the chat input
+.item-input-wrapper {
+  background: transparent;
+  position: relative;
+  width: calc(100% - 24px);
+
+  -webkit-box-flex: unset;
+  -webkit-flex: unset;
+  -moz-box-flex: unset;
+  -moz-flex: unset;
+  -ms-flex: unset;
+  flex: unset;
+
+  input {
+    color: $footerInputTextColor;
+  }
+}
+
+.bar-chat-footer {
+  background: $footerColor;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 1px -3px 20px rgba($color-white, 0.05), 1px 1px 1px rgba($color-black, 1);
+}

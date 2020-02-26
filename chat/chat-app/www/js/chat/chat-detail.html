@@ -1,0 +1,207 @@
+<ion-view view-title="Details">
+  <div ng-if="vm.showMediaLightbox" id="media-lightbox" class="lightbox backdrop visible active" ng-click="vm.closeMediaLightbox()">
+    <a
+      id="closeLightboxBtn"
+      class="button icon button-clear ion-ios-close-empty"
+      ng-click="vm.closeMediaLightbox()"
+    >
+    </a>
+    <div class="lightbox__img-container">
+      <img ng-src="{{vm.lightboxMedias[vm.lightboxMediaSelectedIndex].url}}" />
+      <div class="lightbox__footer">
+        <div>
+          {{vm.lightboxMediaSelectedIndex + 1}} of {{vm.lightboxMedias.length}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-content chat-content--detail chat-detail">
+
+    <ion-list ng-if="vm.type === 'LINKS'">
+      <ion-item ng-click="vm.selectLinkItem(link)"
+        class="item item-text-wrap"
+        ng-repeat="link in vm.content">
+        {{link.text}}
+      </ion-item>
+    </ion-list>
+
+    <ion-list ng-if="vm.type === 'DETAILS'">
+        <ion-item ng-click="vm.selectListItem(element)"
+        class="item item-text-wrap"
+        ng-repeat="element in vm.content"
+        ng-class="{
+          'disable-clicks': vm.displayOptions.disallow_clicks_on_list_item,
+          'item-thumbnail-left': element.properties.topPanel.imageUrl
+        }">
+
+        <img
+          ng-class="{ 'img-rounded' : app.appOptions.isDetailImgRounded }"
+          ng-if="element.properties.topPanel.imageUrl"
+          ng-src="{{element.properties.topPanel.imageUrl}}" />
+
+        <h3 class="detail-title">{{ element.properties.topPanel.title }}</h3>
+
+        <div style="width: 100%">
+          <div ng-if="!vm.displayOptions.print_key_values"
+            class="container-elipsis text-description">
+            {{ element.properties.topPanel.subtitles[0] }}
+          </div>
+        </div>
+
+        <div ng-if="vm.displayOptions.print_key_values"
+          class="text-description">
+          <div ng-repeat="(key, value) in element.uiPrintValues">
+            <b>{{key}}:</b> {{value || '-'}}
+          </div>
+        </div>
+
+      </ion-item>
+
+    </ion-list>
+
+    <ion-list ng-if="vm.type === 'LIST-VIEW-PANEL-LAYOUT'">
+      <!-- TOP PANEL -->
+      <ion-item ng-click="vm.selectListItem(element)"
+        class="item item-text-wrap"
+        ng-repeat="element in vm.content"
+        ng-class="{
+          'item-thumbnail-left': element.properties.topPanel.uiImageUrl,
+          'item-icon-right': !vm.displayOptions.disallow_clicks_on_list_item,
+          'disable-clicks': vm.displayOptions.disallow_clicks_on_list_item
+        }">
+
+        <img ng-class="{ 'img-rounded' : app.appOptions.isDetailImgRounded }" ng-if="element.properties.topPanel.uiImageUrl" ng-src="{{element.properties.topPanel.uiImageUrl}}">
+
+        <div ng-if="element.properties.topPanel.badgeText"
+          class="app-badge">{{ element.properties.topPanel.badgeText }}</div>
+
+        <h3 class="detail-title">{{ element.properties.topPanel.title }}</h3>
+
+        <div class="text-description limit-height" ng-bind-html="element.properties.topPanel.subtitles[0]"></div>
+
+        <div ng-if="element.properties.topPanel.rating.value" class="star-ratings">
+            <input-stars max="5"
+                        icon-base="text-muted ion-android-star"
+                        list-class="rating-list"
+                        readonly="true"
+                        allow-half
+                        ng-model="element.properties.topPanel.rating.value">
+            </input-stars>
+
+            <small class="rating-label" style="font-size: 11px;top: -6px;left: 0px;">
+              {{ vm.getRatingString(element.properties.topPanel.rating.value) }}
+            </small>
+          </div>
+
+          <i ng-if="!vm.displayOptions.disallow_clicks_on_list_item"
+            class="icon ion-chevron-right text-charcoal"></i>
+
+      </ion-item>
+      <!-- END: TOP PANEL -->
+
+    </ion-item>
+
+    </ion-list>
+
+    <div ng-switch="vm.type">
+      <div ng-switch-when="SINGLE-VIEW-PANEL-LAYOUT" class="chat-detail__panels" ng-class="{'sticky-action-btn': vm.hasActionButton(vm.theEl.properties.bodyPanels) && app.appOptions.isStickyActionBtn}">
+
+        <!-- TOP PANEL -->
+        <ion-item
+          class="item item-text-wrap">
+
+          <div class="carousel-panel" ng-if="vm.theEl.properties.topPanel.carouselMedia.length">
+            <swiper instance="vm.swiper" slides-per-view="auto" lazy="true">
+              <slides>
+                <slide
+                  ng-repeat="media in vm.theEl.properties.topPanel.carouselMedia"
+                  >
+                    <div class="swiper__img-container">
+                      <img ng-click="vm.onClickSlide(media, $index)" src="{{media.url}}" alt="">
+                    </div>
+                </slide>
+              </slides>
+              <prev>
+                <svg class="icon-back" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m217.9 256 127.1-127c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0l-144 143.9c-9.1 9.1-9.3 23.7-.7 33.1l144.6 144.9c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9z"/></svg>
+              </prev>
+              <next>
+                <svg class="icon-back" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m217.9 256 127.1-127c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0l-144 143.9c-9.1 9.1-9.3 23.7-.7 33.1l144.6 144.9c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9z"/></svg>
+              </next>
+            </swiper>
+          </div>
+
+          <div class="detail-category">{{ vm.theEl.properties.topPanel.preTitle }}</div>
+
+          <h3 class="detail-title" ng-class="{'larger' : app.appOptions.isSingleTitleLarge }">{{ vm.theEl.properties.topPanel.title }}</h3>
+
+        </ion-item>
+        <!-- END: TOP PANEL -->
+
+
+        <!-- BODY PANELS -->
+        <chat-detail-panel
+          ng-repeat="panelData in vm.theEl.properties.bodyPanels"
+          panel-data='panelData'
+          on-click-button-action="vm.onClickPanel(panelClicked)"
+          ng-class="{
+            'panel-sticky' : panelData.type === 'button-action' && app.appOptions.isStickyActionBtn,
+            'panel-action-btn': panelData.type === 'button-action'
+          }"
+        ></chat-detail-panel>
+
+        <!-- END: BODY PANELS -->
+
+      </div>
+    </div>
+
+
+    <div ng-if="vm.type === 'SINGLE-VIEW'">
+        <!-- DESCRIPTION SECTION -->
+        <div class="item item-single-view item-text-wrap detail-item">
+           <img class="img-rounded" ng-if="vm.theEl.properties.topPanel.imageUrl" ng-src="{{vm.theEl.properties.topPanel.imageUrl}}">
+
+          <h5 class="detail-header text-uppercase larger">{{ vm.theEl.properties.topPanel.title }}</h5>
+
+          <div class="detail-description">
+            {{ vm.theEl.properties.topPanel.subtitles[0] }}
+          </div>
+
+          <div ng-repeat="panel in vm.theEl.properties.bodyPanels" class="item item-text-wrap detail-item">
+            <div ng-switch="panel.type">
+              <div ng-switch-when="list">
+                <h5 class="detail-header text-uppercase">
+                  {{ panel.header }}
+                </h5>
+
+                <div class="chat-detail-list" ng-repeat="content in panel.contents">
+                  <h6 class="list-header">
+                    {{ content.topHeader }}
+                    <svg class="icon-chevron-down" aria-hidden="true" focusable="false" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+                      <path d="M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z" fill="#fff"></path>
+                    </svg>
+                  </h6>
+
+                  <div class="list-body">
+                    <div class="list-item" ng-repeat="slot in content.details">
+                      <p>{{ slot.text }}</p>
+                      <button>Select</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div ng-switch-default>
+                <h5 class="detail-header text-uppercase">
+                  {{ panel.header }}
+                </h5>
+                <p ng-repeat="content in panel.contents" class="description-truncated" ng-class="{'disable': vm.showMoreDesc}">
+                  {{ content.value | htmlToPlaintext }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</ion-view>

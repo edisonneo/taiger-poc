@@ -1,0 +1,40 @@
+{
+  "paths": {
+    "context": "./context",
+    "chatRoot": "./chat",
+    "chatWidgetOverrides": "./widget",
+    "chatApp": "./chat/chat-app",
+    "chatWidget": "./chat/widget",
+    "contextDist": "./dist",
+    "chatWidgetDist": "./dist/chat/widget",
+    "chatAppDist": "./dist/chat/chat-app"
+  },
+  "env": {
+    "chatEndpoint": "/iconverse-converse",
+    "chatBaseUrl": "/demo-ui"
+  },
+  "context": {
+    "chatButtonColor": "#444",
+    "backgroundImageFile": "",
+    "backgroundFallbackColor": "#DDD"
+  },
+  "widgetOverrides": {
+    "customCss": "",
+    "chatButtonImage": ""
+  },
+  "appOptions": {
+    "appName": "",
+    "inputPlaceholder": "",
+    "firstMessageTypingDelayMs": null,
+    "typingDelayMs": null,
+    "idleDelayTimeMins": 3,
+    "idleMessageTitle": "",
+    "idleMessageBody": ""
+  },
+  "appOverrides": {
+    "customCss": "",
+    "avatarPngImg": "",
+    "customLandingPageScss": "",
+    "customLandingPageHtml": ""
+  }
+}

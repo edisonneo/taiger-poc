@@ -1,0 +1,46 @@
+// Colors
+// -------------------------------
+
+$color-white: #fff;
+$color-black: #000;
+
+$color-gray-lightest: #f4f8f9;
+$color-gray-lighter: #f8f8f8;
+$color-gray: #ddd;
+$color-gray-darker: #666;
+$color-gray-darkest: #4a4a4a;
+
+$color-primary-lighter: #11c1f3;
+$color-primary: #4a90e2;
+$color-primary-darker: #237db3;
+$color-primary-darkest: #434e9b;
+$color-secondary: #0c60ee;
+
+$color-green-lightest: #A7CF39;
+
+$chatBubbleSystemBgColorDefault: $color-gray-lighter;
+$chatBubbleSystemBgColor: $color-gray-lighter;
+$backgroundColor: $color-white;
+$footerColor: $color-gray-lightest;
+$footerInputTextColor: $color-gray-darker;
+$chatBubbleFontColor: $color-gray-darker;
+$chatLinkListColor: $color-primary;
+$chatInMessageLinkColor: $color-primary;
+
+// Font
+// -------------------------------
+$font-family-base: "Hind Siliguri", Helvetica, Arial;
+
+// Spacing
+// -------------------------------
+$chatBubbleMargin: 10px;
+$chatAvatarWidth: 35px;
+$chatBubbleLeftMargin: 8px;
+$chatBubbleBorderRadius: 10px;
+$chatBubbleFontWeight: 400;
+$chatBubbleFontSize: 14px;
+$promptButtonFontSize: 14px;
+$promptOptionsButtonFontSize: 13px;
+$chatLinkListColor: $color-secondary;
+$chatInMessageLinkColor: $color-secondary;
+$hoverListButtonColor: $color-gray-lighter;

@@ -1,0 +1,159 @@
+<div
+  id="{{ 'chat-bubble-root-' + (message ? message.id : 'noop') }}"
+  class="chat-bubble-root"
+  ng-class="{
+  'chat-bubble-root--user': sourceIsUser,
+  '{{ entryTransition }}': true,
+  'has-attachment': (hasAttachment && !sourceIsUser),
+  'has-payload-btn': (hasAttachment && !sourceIsUser && message.payload ),
+  'has-avatar': !sourceIsUser,
+  'exit': message.isExiting,
+  'no-animate': message.userHasRead,
+  'partial-message': !message.isFirst,
+  'first-message': message.isFirst,
+  'last-message': message.isLast,
+  'animation-delay--xs': message.isProcessingMsg
+  }"
+>
+  <div
+    class="chat-bubble-wrapper selectable"
+    ng-class="{'user': sourceIsUser, 'system': !sourceIsUser, 'holds-typing-indicator': message.isProcessingMsg}"
+  >
+    <div ng-if="!sourceIsUser && isAvatarVisible" class="avatar-holder">
+      <img ng-class="{'invisible': message.isProcessingMsg}" src="img/avatar.png" />
+    </div>
+
+    <div
+      class="chat-bubble"
+      ng-class="{
+        'user': sourceIsUser,
+        'system': !sourceIsUser,
+        'holds-typing-indicator': message.isProcessingMsg,
+        'has-attachment': hasAttachment,
+        'full-width':  message.links.length > 0
+      }"
+    >
+      <!-- processing indicator -->
+      <div ng-if="message.isProcessingMsg" class="typing-indicator">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <!-- text -->
+      <div class="preline-text chat-bubble__answer-text" compile="message.text | buildLinks:'triggerFn'" data-tap-disabled="true"></div>
+
+      <!-- links -->
+      <div ng-if="message.links.length && !isHideButtonList" class="chat-bubble__link-container">
+        <button
+          ng-repeat="link in message.links | limitTo: linksLimitCount"
+          ng-click="clickLink(link)"
+          class="chat-bubble__link full-width"
+          ng-class="{
+            'chat-bubble__link--external': link.action,
+            'chat-bubble__link--external-exited': link.action && (getSurveyStatus(link.url) === 'exited' || !isActiveExternalUrlBtn),
+            'chat-bubble__link--external-taken': link.action && getSurveyStatus(link.url) === 'taken',
+          }"
+          ng-disabled="link.action && shouldDisableSurveyButton(link.url)"
+          ng-if="message.links.length"
+        >
+          {{ getLinkText(link) }}
+          <svg ng-if="isSurveyTaken(link.url)" width="12" height="8" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.08471 9.46756L1.29164 5.73602L0 6.99776L5.08471 12L16 1.26174L14.7175 0L5.08471 9.46756Z" fill="white"/>
+          </svg>
+        </button>
+        <button
+          ng-if="message.links.length > linksLimitCount"
+          class="toggle-showall-btn full-width"
+          ng-click="clickAttachment()"
+        >
+          <div class="text">See {{ showAllLinks ? 'Less' : 'All' }}</div>
+        </button>
+      </div>
+
+      <!-- payload button -->
+      <div
+        ng-click="clickAttachment()"
+        ng-if="!message.links.length && hasAttachment && !isHideAttachmentList"
+        class="open-payload-btn"
+        ng-class="{ 'open-payload-btn--disabled' : !isActiveMsg}"
+      >
+        Click here to view details
+      </div>
+    </div>
+  </div>
+
+  <!-- livechat button -->
+  <div ng-if="message.agentAvailable" class="chat-options-holder">
+    <button ng-click="triggerLiveChat()"
+      ng-class="!isActiveMsg ? 'chat-prompt-btn--disabled' : 'chat-prompt-btn--active'"
+      class="chat-prompt-btn full-width">
+      <ion-spinner ng-if="isLivechatLoading" icon="ios-small"></ion-spinner>
+      <div class="text">
+        Open Live Chat
+      </div>
+    </button>
+  </div>
+
+  <!-- start over button -->
+  <div ng-if="message.subtopic === 'SessionExpired'" class="chat-options-holder">
+    <button ng-click="clickRestart()"
+      ng-class="!isActiveMsg ? 'chat-prompt-btn--disabled' : 'chat-prompt-btn--active'"
+      class="chat-prompt-btn full-width">
+      <div class="text">
+        Start Over
+      </div>
+    </button>
+  </div>
+
+  <!-- NOTE: Temporary hide the rating panel feature, yet to decide if ratable feature still needed for the application -->
+  <!--  Rating Panel -->
+  <!-- <div class="chat-options-holder">
+    <div ng-if="message.fallbackType === FALLBACK_TYPE.NONE && message.rate" class="rating-panel">
+      <span class="text-muted">&nbsp;&nbsp; Answers your question?</span>
+      &nbsp;
+      <svg
+        class="icon-check"
+        ng-click="rateAnswer(true)"
+        ng-class="{'balanced': !currRating || currRating==='correct', 'text-weak': currRating==='wrong'}"
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 512 512"
+      >
+        <path
+          d="M362.6 192.9L345 174.8c-.7-.8-1.8-1.2-2.8-1.2-1.1 0-2.1.4-2.8 1.2l-122 122.9-44.4-44.4c-.8-.8-1.8-1.2-2.8-1.2-1 0-2 .4-2.8 1.2l-17.8 17.8c-1.6 1.6-1.6 4.1 0 5.7l56 56c3.6 3.6 8 5.7 11.7 5.7 5.3 0 9.9-3.9 11.6-5.5h.1l133.7-134.4c1.4-1.7 1.4-4.2-.1-5.7z"
+        />
+      </svg>
+      <svg
+        class="icon-close"
+        ng-click="rateAnswer(false)"
+        ng-class="{'assertive': !currRating || currRating==='wrong', 'text-weak': currRating==='correct'}"
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 512 512"
+      >
+        <path
+          d="M278.6 256l68.2-68.2c6.2-6.2 6.2-16.4 0-22.6-6.2-6.2-16.4-6.2-22.6 0L256 233.4l-68.2-68.2c-6.2-6.2-16.4-6.2-22.6 0-3.1 3.1-4.7 7.2-4.7 11.3 0 4.1 1.6 8.2 4.7 11.3l68.2 68.2-68.2 68.2c-3.1 3.1-4.7 7.2-4.7 11.3 0 4.1 1.6 8.2 4.7 11.3 6.2 6.2 16.4 6.2 22.6 0l68.2-68.2 68.2 68.2c6.2 6.2 16.4 6.2 22.6 0 6.2-6.2 6.2-16.4 0-22.6L278.6 256z"
+        />
+      </svg>
+    </div>
+
+    <div ng-if="message.correct" class="rating-panel table-cell">
+      <span class="text-muted"
+        >This was indicated as
+        {{ message.correct === 'true' ? 'the correct' : 'a wrong' }} answer</span
+      >
+      &nbsp;
+      <i
+        class="icon"
+        ng-class="{'balanced ion-checkmark': message.correct==='true', 'assertive ion-close': message.correct==='false'}"
+      ></i>
+    </div>
+  </div> -->
+</div>

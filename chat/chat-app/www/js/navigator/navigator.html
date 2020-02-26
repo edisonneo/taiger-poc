@@ -1,0 +1,46 @@
+<ion-view cache-view="false"  view-title="Directions">
+
+  <div class="bar bar-subheader bar-stable">
+    <a ng-click="app.historyBack()" class="button-clear button button-icon icon ion-ios-arrow-back">&nbsp;Back</a>
+    <h1 class="title">How To Get There</h1>
+    <a ng-click="vm.onManualSelectToGetCurrentLocation()" class="button-clear button button-icon icon ion-android-locate"></a>
+  </div>
+
+
+  <div class="content-area content-area--twoheaders">
+
+    <div class="button-bar bar-light padding tight">
+      <a ng-class="{'active': vm.transitType === 'DRIVING'}" ng-click="vm.transitType = 'DRIVING'" class="button">Car</a>
+      <a ng-class="{'active': vm.transitType === 'TRANSIT'}" ng-click="vm.transitType = 'TRANSIT'" class="button">Bus/Train</a>
+      <a ng-class="{'active': vm.transitType === 'WALKING'}" ng-click="vm.transitType = 'WALKING'" class="button">Walking</a>
+    </div>
+
+
+    <div>
+
+      <div class="item item-text-wrap padding-thin" ng-click="vm.openLocationChoicesModal(false)">
+        <p>Starting Location <span class="text-xs align-bottom text-muted">(Click to change)</span></p>
+        <h2>
+          <span ng-if="!vm.currentAddress">Click here to set a start location</span>
+          <strong ng-if="vm.currentAddress">{{vm.currentAddress}}</strong>
+        </h2>
+      </div>
+
+      <div class="item item-text-wrap padding-thin" ng-click="vm.openLocationChoicesModal(true)">
+        <p>Destination <span class="text-xs align-bottom text-muted">(Click to change)</span</p>
+        <h2><strong>{{vm.destination | strReplace: 'Singapore':''}}</strong></h2>
+      </div>
+
+      <div>
+        <ng-map zoom="10" default-style="false" center="[1.352083, 103.819836]">
+       </ng-map>
+      </div>
+
+    </div>
+
+    <a style="margin:0" ng-click="vm.openGoogleMaps()" class="button button-full button-positive">
+      Open Detailed Directions
+    </a>
+
+  </div>
+</ion-view>

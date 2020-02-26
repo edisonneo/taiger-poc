@@ -1,0 +1,32 @@
+#chatLandingPage{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 1000;
+  .landing-page-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .button{
+    border: 2px solid #4a90e2;
+    color: #4a90e2;
+    font-weight: bold;
+    padding: 0px 24px;
+    min-height: 32px;
+    transition: 0.3s;
+    &:hover{
+      background: #4a90e2;
+      color: #fff;
+    }
+  }
+}
+
+
+

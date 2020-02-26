@@ -1,0 +1,189 @@
+/**
+ * Chat detail styling
+ */
+
+ .chat-detail {
+   height: calc(100% - #{$headerHeight}) !important;
+
+  .text-description {
+    font-size: 12px;
+    color: $color-gray-darker;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    &.full-length{
+      -webkit-line-clamp: initial;
+    }
+  }
+
+  .single-line-height {
+    height: 1.3em;
+  }
+
+  .item.disable-clicks {
+    cursor: default;
+
+    &.activated {
+      background-color: inherit !important;
+    }
+  }
+
+  .item.item-single-view {
+    img {
+      width: 100%;
+    }
+  }
+
+  .detail-header {
+    font-size: 11px !important;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: $color-gray-darkest;
+    opacity: 0.8;
+  }
+
+  .detail-title {
+    margin-top: 5px !important;
+    color: $color-gray-darkest;
+    font-weight: bold;
+    font-size: 16px !important;
+    max-height: 2.4em;
+    margin-bottom: 0px !important;
+    overflow: hidden !important;
+
+    &.larger {
+      font-size: 22px !important;
+    }
+  }
+
+  .detail-item {
+    b,
+    strong {
+      font-size: 12px;
+    }
+  }
+
+  .detail-category {
+    color: $color-gray-darkest;
+    text-transform: uppercase;
+    opacity: 0.8;
+    font-size: 12px;
+    margin-bottom: -4px;
+  }
+}
+
+/** Chat detail list */
+.chat-detail-list {
+  margin-bottom: 12px;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background: $color-primary;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .list-header {
+    color: #fff;
+    padding: 12px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    margin-bottom: 0;
+    display: flex;
+    display: ms-flex;
+    justify-content: space-between;
+    -ms-justify-content: space-between;
+  }
+
+  .list-body {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+
+    .list-item {
+      padding: 8px 16px;
+      display: flex;
+      display: -ms-flex;
+      justify-content: space-between;
+      ms-justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+
+      &:last-child {
+        border-bottom: 0px;
+      }
+
+      p {
+        margin-bottom: 0px;
+      }
+
+      button {
+        background: #fff;
+        border-radius: 4px;
+        border: 0px;
+        color: $color-primary;
+      }
+    }
+  }
+
+  .app-badge {
+    font-size: 10px;
+    padding: 0px 6px;
+    background: $color-primary-lighter;
+    display: inline-block;
+    color: $color-white;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-top: 4px;
+  }
+}
+
+.chat-detail__panels{
+  position: relative;
+  &.sticky-action-btn{
+    chat-detail-panel{
+      &:nth-last-child(2){
+        margin-bottom: 80px;
+      }
+    }
+  }
+}
+
+
+chat-detail-panel{
+  display: block;
+  &.panel-action-btn{
+    display: block;
+    padding: 0px 12px;
+  }
+  &.panel-sticky{
+    position: fixed;
+    width: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0) 0%, #fff 30%, #fff 100%);
+    z-index: 2;
+    bottom: 0;
+    padding: 18px 12px 0px;
+    /*
+    *  1. -webkit-transform is needed to fix the conflict of:
+    *     a) -webkit-overflow-scrolling: touch (parent element)
+    *     b) position: fixed (child element)
+    *     This will force the GPU to re-render the element.
+    *     Only use -webkit- for the transform to work with -webkit-overflow-scrolling.
+    */
+    transform: translate3d(0,0,0);
+  }
+}
+
+.chat-detail__btn-action{
+  .button{
+    border-radius: 6px;
+    font-family: $brandFont;
+    font-weight: bold;
+  }
+}

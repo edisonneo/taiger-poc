@@ -1,0 +1,35 @@
+<div ng-if="$ctrl.panel.type !== 'button-action' && !$ctrl.isShouldHidePanel"
+    ng-class="{'textAlign': $ctrl.panel.textAlign}"
+    class="item item-text-wrap detail-item">
+    <h5 class="detail-header text-uppercase">{{$ctrl.panel.header}}</h5>
+
+    <div ng-if="$ctrl.panel.type === 'text-paragraph'">
+        <p
+            ng-repeat="content in $ctrl.panel.contents track by $index"
+            ng-bind-html="content.value"
+            class="description-truncated"
+            ng-class="{'disable': $ctrl.showMoreDesc}">
+        </p>
+        <div ng-if="$ctrl.isDisplayShowMore" class="text-center" class="show-more-panel">
+            <a ng-click="$ctrl.showMoreDesc = !$ctrl.showMoreDesc" class="text-sm">
+                <b>{{$ctrl.showMoreDesc ? 'Show Less' : 'Show More'}}</b>
+            </a>
+        </div>
+    </div>
+
+
+    <div ng-if="$ctrl.panel.type === 'text'"
+        ng-repeat="content in $ctrl.panel.contents track by $index"
+        class="text-description full-length">
+        <b ng-if="content.label">{{ content.label }}:</b> <span ng-bind-html="content.value"></span>
+    </div>
+
+</div>
+
+<div class="chat-detail__btn-action" ng-if="$ctrl.panel.type === 'button-action' && !$ctrl.isShouldHidePanel">
+    <button
+        ng-click="$ctrl.handleClickButtonAction()"
+        class="button button-full button-positive">
+        {{$ctrl.panel.buttonText}}
+    </button>
+</div>

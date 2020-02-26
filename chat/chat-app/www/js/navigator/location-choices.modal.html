@@ -1,0 +1,17 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">New {{vm.isModifyingDestination ? 'Destination' : 'Starting Location'}}</h1>
+		 <button ng-click="vm.closeLocationChoicesModal()" 
+		 	class="button button-clear button-positive button-icon ion-ios-close-empty">
+		 </button>
+	</ion-header-bar>
+	<ion-content>
+		<ion-google-place ng-if="vm.currentPosition"
+		current-position="vm.currentPosition"
+		placeholder="Enter an address" 
+		ng-model="vm.googlePlaceEntry" 
+		api="vm.googlePlaceComponentApi"
+		location-changed="vm.onLocationChosen"/>
+		</ion-google-place>
+	</ion-content>	
+</ion-modal-view>

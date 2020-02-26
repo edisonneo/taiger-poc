@@ -1,0 +1,33 @@
+<div class="selected_date_full">{{vm.opts.title}}</div>
+<div ng-if="!vm.isIE" class="row">
+    <div class="col col-25 text-right">
+        <button ng-click="vm.decrement()"
+            ng-disabled="vm.selectedNumber <= vm.opts.min"
+            class="button icon ion-minus-round"></button>
+    </div>
+    <div class="col col-50 text-center picker-number">
+        {{vm.selectedNumber}}
+    </div>
+    <div class="col col-25 text-left">
+        <button ng-click="vm.increment()"
+            ng-disabled="vm.selectedNumber >= vm.opts.max"
+            class="button icon ion-plus-round"></button>
+
+    </div>
+</div>
+
+<div ng-if="vm.isIE" class="row">
+    <div class="col col-25 text-right">
+        <a ng-click="vm.decrement()"
+            ng-disabled="vm.selectedNumber <= vm.opts.min"
+            class="button icon ion-minus-round"></a>
+    </div>
+    <div class="col col-50 text-center picker-number">
+        {{vm.selectedNumber}}
+    </div>
+    <div class="col col-25 text-left">
+        <a ng-click="vm.increment()"
+            ng-disabled="vm.selectedNumber >= vm.opts.max"
+            class="button icon ion-plus-round"></a>
+    </div>
+</div>

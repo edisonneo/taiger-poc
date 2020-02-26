@@ -1,0 +1,166 @@
+.bar.bar-brand {
+  background-color: $color-primary;
+  color: $color-white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: 0.3s;
+  padding: 0;
+  border: none;
+
+  // This is use to override default style
+  > .button + .button:last-child {
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .bar-brand__title {
+    font-family: $brandFont;
+    font-weight: $chatTitleFontWeight;
+    font-size: $chatTitleFontSize;
+    color: inherit;
+    padding: 0 20px;
+  }
+
+  .flex-spacer {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 0px;
+    flex: 1 0 0px;
+  }
+
+  #langSelectBtn,
+  #menuSelectBtn,
+  #closeChatBtn,
+  #backBtn {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+    color: $color-white;
+    max-height: none;
+    height: 100%;
+    min-width: 48px;
+    border-radius: 0;
+
+    &:hover {
+      background-color: $color-primary-darker;
+    }
+
+    svg {
+      transition: 0.3s;
+      height: 14px;
+      width: 14px;
+      fill: currentColor;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      background: $color-white;
+      min-width: 220px;
+      padding: 6px;
+      border-radius: 4px;
+      box-shadow: 0px 0px 15px $color-gray;
+      transform-origin: calc(100% - 24px) -14px;
+
+      &__tip {
+        position: absolute;
+        top: -8px;
+        right: 12px;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid $color-white;
+      }
+
+      &.ng-enter,
+      &.ng-leave {
+        transition: 0.2s;
+        transition-timing-function: ease-in-out;
+      }
+      &.ng-enter,
+      &.ng-leave.ng-leave-active {
+        transform: scale(0);
+        // opacity: 0;
+      }
+      &.ng-leave,
+      &.ng-enter.ng-enter-active {
+        transform: scale(1);
+        // opacity: 1;
+      }
+
+      a {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        text-transform: none;
+        text-decoration: none;
+        color: $color-gray-darkest;
+        font-size: 14px;
+        min-height: 48px;
+        line-height: 48px;
+        padding: 0 10px;
+        border-radius: inherit;
+      }
+    }
+  }
+
+  #langSelectBtn {
+    &.is-open {
+      background-color: $color-primary-darker;
+      > svg {
+        transform: rotate(180deg);
+      }
+    }
+    .dropdown-menu {
+      top: calc(#{$headerHeight} + 14px);
+      right: 0;
+      min-width: 120px;
+
+      a {
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        &.selected {
+          background-color: $color-gray-lighter;
+        }
+        &:hover:not(.selected) {
+          background-color: $color-gray-lighter;
+        }
+      }
+    }
+  }
+
+  #menuSelectBtn {
+    &.is-open {
+      background-color: $color-primary-darker;
+    }
+    .dropdown-menu {
+      top: calc(#{$headerHeight} + 14px);
+      right: 7px;
+
+      a {
+        &:hover {
+          background-color: $color-gray-lighter;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+#iconverse-chat-btn {
+    background-color: transparent !important;
+	background-image: url("brand-chat-icon.png");
+    background-size: 88px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 0;
+	z-index: 100000000000;
+    height: 70px;
+    width: 100px;
+    bottom: 2px;
+}
+
+#iconverse-chat-btn.activated {
+    background-color: transparent !important;
+	background-image: url("brand-chat-icon.png");
+    background-size: 88px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 0;
+	z-index: 100000000000;
+    height: 70px;
+    width: 100px;
+    opacity: 0.7;
+}

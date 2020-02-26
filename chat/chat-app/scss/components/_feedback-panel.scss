@@ -1,0 +1,131 @@
+feedback-panel {
+  position: absolute;
+  width: 90%;
+  top: 65px;
+  left: 5%;
+  z-index: 1000;
+}
+
+.feedback-panel-btn {
+  background: none;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.feedback-panel {
+  z-index: 1000;
+
+  .feedback-panel__container {
+    height: inherit;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .feedback-panel__star-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .feedback-panel__stars {
+    display: inline-block;
+    position: relative;
+    margin: 0px 12px 0px 0px;
+    font-size: 50px;
+    label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      cursor: pointer;
+      &:last-child {
+        position: static;
+      }
+      &:nth-child(1) {
+        z-index: 6;
+      }
+      &:nth-child(2) {
+        z-index: 5;
+      }
+      &:nth-child(3) {
+        z-index: 4;
+      }
+      &:nth-child(4) {
+        z-index: 3;
+      }
+      &:nth-child(5) {
+        z-index: 2;
+      }
+      &:nth-child(6) {
+        z-index: 1;
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+      }
+      .icon {
+        float: left;
+        color: transparent;
+      }
+      &:last-child .icon {
+        color: #000;
+      }
+    }
+    &:not(:hover) label input:checked ~ .icon,
+    &:hover label:hover input ~ .icon {
+      color: #fde35e;
+    }
+    label input:focus:not(:checked) ~ .icon:last-child {
+      color: #000;
+      text-shadow: 0 0 5px #fde35e;
+    }
+  }
+  .feedback-panel__label {
+    width: 60px;
+  }
+}
+
+.feedback-panel-content {
+  background: $color-white;
+}
+
+.feedback-panel-content textarea {
+  width: 100%;
+}
+
+.fallback-feedback-panel {
+  padding: 4px 2px;
+  font-size: 12px;
+  margin-left: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+
+  svg {
+    width: 24px;
+    height: 20px;
+    cursor: pointer;
+    &.balanced {
+      fill: currentColor;
+    }
+    &.assertive {
+      fill: currentColor;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+<div ng-if="state.isShowing" class="feedback-panel" ng-class="{'ionic-styles center-align': isMobile}">
+  <div class="feedback-panel-content card">
+    <div class="item item-divider item-icon-right">
+      Your Feedback
+      <i ng-click="api.hide()" class="icon ion-close" style="font-size: 20px;"></i>
+    </div>
+     <div class="item item-text-wrap text-center">
+        <h3> <b>How was your interaction with<br>{{chatAppName}}?</b> </h3>
+
+        <div class="star-ratings">
+          <small class="rating-label">Poor</small>
+          <input-stars max="6" icon-base="text-muted icon ion-android-star" list-class="rating-list" ng-model="entry.ratingNum"></input-stars>
+          <small class="rating-label">Excellent</small>
+
+          <br>
+          <small ng-if="!entry.ratingNum" class="positive text-brand">
+            <i class="icon ion-arrow-up-c"></i>
+            <br>
+            tap on a star
+            </small>
+        </div>
+
+        <br>
+
+        <h3> <b>Any comments? (Optional)</b> </h3>
+
+        <textarea ng-if="!isMobile" ng-model="entry.comments" class="form-control" rows="3" placeholder="Please tell us how we can improve {{chatAppName}}"></textarea>
+
+        <div ng-if="isMobile" class="nomargins list list-inset">
+          <label class="item item-input">
+            <textarea ng-model="entry.comments" rows="3" placeholder="Please tell us how we can improve {{chatAppName}}"></textarea>
+          </label>
+        </div>
+        <form ng-submit="submitFeedback()">
+          <button type="submit" ng-disabled="!entry.ratingNum" class="mt-10 button button-brand button-block" ng-class="{'mt-10': isMobile}">
+            <i ng-if="state.showSuccessMsg" class="fa fa-check"></i>&nbsp;
+            {{state.showSuccessMsg ? 'Feedback Received!' : 'Submit Feedback'}}
+          </button>
+        </form>
+
+     </div>
+  </div>
+</div>

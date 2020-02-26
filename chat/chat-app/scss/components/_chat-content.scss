@@ -1,0 +1,61 @@
+.chat-content {
+  margin-top: $headerHeight;
+  height: calc(100% - 90px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-left: 20px;
+  padding-right: 25px;
+
+  .chat-bubble {
+    img,
+    video {
+      width: 100%;
+    }
+  }
+
+  &.chat-content--detail {
+    padding: 0;
+
+    .list {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.choices-panel {
+  text-align: center;
+  .chat-prompt-btn {
+    min-width: 0;
+    margin-bottom: 8px;
+    .text{
+      text-align: center;
+      display: inline-block;
+
+      // IE does not support word-break: break-word,
+      // there is a need to fallback to word-break: normal
+      word-break: normal;
+      word-break: break-word;
+    }
+  }
+  .chat-prompt-answer {
+    min-width: 75px;
+    margin-bottom: 20px;
+  }
+}
+
+.file-loading-area {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  padding: 10px;
+  width: 95%;
+  height: 55px;
+  z-index: 10000000;
+  background: rgba($color-white, 0.8);
+}

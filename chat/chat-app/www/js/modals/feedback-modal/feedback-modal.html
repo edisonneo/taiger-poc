@@ -1,0 +1,74 @@
+<ion-modal-view id="feedbackModal">
+  <ion-header-bar>
+    <a id="closeFeedbackModal" ng-click="_feedbackModal.closeModal()" class="feedback-panel-btn">
+        <svg class="icon-close" aria-hidden="true" focusable="false" width="1em" height="1em"  preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+          <path d="M278.6 256l68.2-68.2c6.2-6.2 6.2-16.4 0-22.6-6.2-6.2-16.4-6.2-22.6 0L256 233.4l-68.2-68.2c-6.2-6.2-16.4-6.2-22.6 0-3.1 3.1-4.7 7.2-4.7 11.3 0 4.1 1.6 8.2 4.7 11.3l68.2 68.2-68.2 68.2c-3.1 3.1-4.7 7.2-4.7 11.3 0 4.1 1.6 8.2 4.7 11.3 6.2 6.2 16.4 6.2 22.6 0l68.2-68.2 68.2 68.2c6.2 6.2 16.4 6.2 22.6 0 6.2-6.2 6.2-16.4 0-22.6L278.6 256z" fill="#000"/>
+        </svg>
+    </a>
+    <h1 class="title">{{ _feedbackModal.title }}</h1>
+</ion-header-bar>
+<ion-content>
+  <div class="feedback-panel" ng-class="{'ionic-styles center-align': isMobile}">
+    <div class="feedback-panel-content card">
+      <div class="item item-text-wrap text-center">
+        <h3> <b>We'd love to hear what you thought about <br>{{ app.appOptions.feedbackAppName ? app.appOptions.feedbackAppName : app.appOptions.appName }}</b> </h3>
+        <div id="feedbackStarRatings" class="feedback-panel__container mt-10 feedback-panel__container--large">
+          <div class="feedback-panel__star-container">
+            <p class="feedback-panel__label">Poor</p>
+            <form class="feedback-panel__stars">
+              <label ng-repeat="i in [].constructor(6) track by $index">
+                  <input type="radio" name="stars" value="{{ $index + 1 }}" ng-model="_feedbackModal.entry.ratingNum"/>
+                  <span ng-repeat="j in [].constructor($index + 1) track by $index" class="icon">★</span>
+              </label>
+            </form>
+            <p class="feedback-panel__label">Excellent</p>
+          </div>
+          <br>
+          <small ng-if="!_feedbackModal.entry.ratingNum" class="positive text-brand">
+            <svg class="icon-arrow-up" aria-hidden="true" focusable="false" width="20px" height="20px" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+              <path d="M348.3 216.4c-5 5.1-13.3 5.1-18.4.1L269 155.8v231.3c0 7.1-5.8 12.9-13 12.9s-13-5.8-13-12.9V155.8l-60.9 60.8c-5.1 5-13.3 4.9-18.4-.1-5-5.1-5-13.2.1-18.3l83-82.4c1.2-1.1 2.5-2 4.1-2.7 1.6-.7 3.3-1 5-1 3.4 0 6.6 1.3 9.1 3.7l83 82.4c5.2 4.9 5.3 13.1.3 18.2z" fill="#387ef5"/>
+            </svg>
+            <br>
+            click on a star
+          </small>
+        </div>
+
+        <br>
+
+        <h3> <b>Any comments? (Optional)</b> </h3>
+
+        <textarea ng-if="!isMobile" ng-model="_feedbackModal.entry.comments" class="form-control" rows="3" placeholder="Please tell us how we can improve {{ app.appOptions.feedbackAppName ? app.appOptions.feedbackAppName : app.appOptions.appName }}"></textarea>
+
+        <div ng-if="isMobile" class="nomargins list list-inset">
+          <label class="item item-input">
+            <textarea ng-model="_feedbackModal.entry.comments" rows="3" placeholder="Please tell us how we can improve {{ app.appOptions.feedbackAppName ? app.appOptions.feedbackAppName : app.appOptions.appName }}"></textarea>
+          </label>
+        </div>
+        <!-- <form ng-submit="vm.submitFeedback()"> -->
+          <form ng-submit="_feedbackModal.submitFeedback(_feedbackModal.entry)">
+            <button id="submitFeedbackBtn" type="submit" ng-disabled="!_feedbackModal.entry.ratingNum" class="mt-10 button button-brand button-block" ng-class="{'mt-10': isMobile}">
+              <i ng-if="_feedbackModal.showSuccessMsg" class="fa fa-check"></i>&nbsp;
+              {{ _feedbackModal.showSuccessMsg ? 'Feedback Received!' : 'Submit Feedback' }}
+            </button>
+          </form>
+
+          <button ng-if="_feedbackModal.isShowExitChatBtn && !app.appOptions.isFeedbackForced"
+                  ng-click="_feedbackModal.exitChat()"
+                  class="mt-10 button button-light mr-15 button-small"
+                  ng-class="{'mt-10': isMobile}">
+            Close & Ask Me Later
+          </button>
+
+          <button ng-if="_feedbackModal.isShowExitChatBtn && !app.appOptions.isFeedbackForced"
+                  ng-click="_feedbackModal.saveSkipFeedbackPreferenceAndCloseChat()"
+                  class="mt-10 button button-light ml-15 button-small"
+                  ng-class="{'mt-10': isMobile}">
+            Don't Ask Again
+          </button>
+
+
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

@@ -1,0 +1,121 @@
+<!--
+  This is a development version of context index.html
+  To generate deployable version of index.html, run `gulp context:minify-html`
+  To generate deployable version of script for custom context, run `gulp context:minify-script`
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>TAIGER - iConverse</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width" />
+
+    <style>
+      html {
+        background: #ddd;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+      }
+    </style>
+
+    <!-- start: iconverse chat widget script -->
+    <script async data-minify>
+      // Development version: botId will be overridden during `gulp serve`
+      // Deployed version: botId will be overridden in iconverse-bot-server jsp file
+      var botId = '0d5bc393-c38a-c292-2944-78c2a01cc2a6';
+
+      // Development version: chatBaseUrl will be overriden during `gulp serve` with url from BrowserSync
+      // Deployed version: chatBaseUrl is kept empty when serve by iconverse-bot-server
+      var chatBaseUrl = 'http://localhost:3001';
+
+      // Development version: serverUrl will be overriden during `gulp serve`
+      // Deployed version: serverUrl will be overridden in iconverse-bot-server jsp file
+      var serverUrl = 'http://localhost:8080/iconverse-bot-server/';
+
+      var setupScriptUrl =
+        (chatBaseUrl ? chatBaseUrl + '/chat' : serverUrl + '/base') + '/widget/js/setup.js';
+
+      // if there is no env override, create it and set the client-specific chatBaseUrl
+      if (!window.__env || !window.__env.bot) {
+        if (!window.__env) window.__env = {};
+        window.__env.bot = botId;
+        window.__env.serverUrl = serverUrl;
+        window.__env.chatBaseUrl = chatBaseUrl;
+      }
+      (function() {
+        var w = window;
+        var d = document;
+        function l() {
+          var s = d.createElement('script');
+          s.type = 'text/javascript';
+          s.async = true;
+          s.src = setupScriptUrl;
+          var x = d.getElementsByTagName('script')[0];
+          x.parentNode.insertBefore(s, x);
+        }
+        if (w.attachEvent) {
+          w.attachEvent('onload', l);
+        } else {
+          w.addEventListener('load', l, false);
+        }
+      })();
+    </script>
+    <!-- end: iconverse chat widget script -->
+
+    <script>
+      // Event handler for messages emitted by iframe
+      window.addEventListener('message', function(e) {
+        var msg = e.data;
+        if (msg.type === 'iconverse-event') {
+          console.info('Recvd: ' + msg.state, msg);
+          var node = document.createElement('div');
+          var textnode = document.createTextNode(new Date(msg.timestamp) + ' - ' + msg.eventType);
+          node.appendChild(textnode);
+          document.getElementById('chatMsgLog').appendChild(node);
+        }
+      });
+    </script>
+
+    <script>
+      // Toggle Chat Event Message Log
+      var togglePanel = function() {
+        var $logPanel = document.getElementById('chatLog');
+        $logPanel.style.display === 'none'
+          ? ($logPanel.style.display = 'block')
+          : ($logPanel.style.display = 'none');
+      };
+    </script>
+  </head>
+  <body>
+    <div
+      id="chatLog"
+      style="
+        position: fixed;
+        display:none;
+        left: 20px;
+        bottom: 40px;
+        border: 3px solid #CCC;
+        height: 300px;
+        width: 450px;
+        padding: 10px;
+        margin: 0 auto;
+        overflow-y: scroll;
+        background-color: #FFF;"
+    >
+      <h4 style="color:#666;font-family: Arial; text-align: center">
+        Chat Event Message Log
+        <div style="text-align:center; font-size:12px;">
+          <a
+            target="_blank"
+            href="https://docs.google.com/document/d/18G9sb60ZwHNdCM5cjomexHabUcM8_mFKlR5A6ua8x4Y/edit?usp=sharing"
+            >View API</a
+          >
+        </div>
+      </h4>
+      <div id="chatMsgLog" style="font-size:12px"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+voice-visualization{
+  position: absolute;
+  bottom: 36px;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0), #fff 57%);
+  .warning{
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    color: #555;
+    top: 50%;
+    transform: translateY(-50%);
+    &.ng-enter, &.ng-leave{
+      transition: 0.3s;
+    }
+    &.ng-enter, &.ng-leave.ng-leave-active {
+      opacity: 0;
+    }
+    &.ng-leave, &.ng-enter.ng-enter-active {
+      opacity: 1;
+    }
+  }
+  &.ng-enter, &.ng-leave{
+    transition: 0.3s;
+    height: 0px;
+  }
+  &.ng-enter, &.ng-leave.ng-leave-active {
+    height: 0px;
+    transition-delay: 0.3s;
+    opacity: 0;
+  }
+  &.ng-leave, &.ng-enter.ng-enter-active {
+    height: 80px;
+    opacity: 1;
+  }
+}
+
+#voiceVisualizationCanvas{
+  height: 80px;
+  width: 100%;
+  transition: 0.3s;
+}
+
+
+#voiceRecognition {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}

@@ -1,0 +1,35 @@
+# Ignore node_modules
+node_modules
+
+# Ignore bower packages
+bower_components
+
+# Ignore bower components for chat app (they are in /lib folder)
+chat/chat-app/www/lib
+
+# Ignore temp gulpfiles, which may be generated when running external gulp scripts
+gulpfile.tmp*
+
+# Ignore /dist folder at root (contains output from `gulp build`)
+/dist/
+chat/chat-app/dist/
+
+# Ignore auto generated configuration files (since intermediate client-specific config files may be wrote into this folder)
+chat/chat-app/www/app.options.js
+chat/chat-app/www/env.js
+
+# Ionic related ignores
+chat/chat-app/platforms/
+chat/chat-app/plugins/
+
+# Ignore auto generated css files (contents will be copied in by gulp)
+autogen-client-styles.css
+autogen-client-landing-page-styles.css
+# Ignore auto generated landing page image files (contents will be copied in by gulp)
+chat/chat-app/www/img/landing-page
+
+# Ignore local node executable (used by mvn to build FE)
+/node
+
+# Ignore the auto generated avatar.png
+chat/chat-app/www/img/avatar.png

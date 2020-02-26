@@ -1,0 +1,352 @@
+#iconverse {
+  .chat-log {
+    // padding-right: 15px;
+    padding-bottom: 8px;
+
+    chat-bubble {
+      font-family: $font-family-base;
+      font-weight: $chatBubbleFontWeight;
+      font-size: $chatBubbleFontSize;
+      color: $chatBubbleFontColor;
+
+      .partial-message {
+        margin-top: 4px;
+
+        .chat-bubble.system {
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+      }
+
+      .first-message {
+        margin-bottom: 0px;
+
+        .chat-bubble.system {
+          border-bottom-left-radius: 4px;
+        }
+      }
+
+      .last-message {
+        .chat-bubble.system {
+          border-bottom-left-radius: $chatBubbleBorderRadius;
+        }
+      }
+
+      b {
+        font-weight: 700;
+      }
+
+      ol,
+      ul {
+        list-style: disc;
+        padding-left: 20px;
+        line-height: 1.3em;
+        margin-top: 3px;
+
+        li {
+          margin-bottom: 3px;
+        }
+      }
+
+      ol{
+        list-style: decimal;
+      }
+
+      iframe.map-holder {
+        width: 285px;
+        height: 225px;
+      }
+
+      .notification{
+        margin: 32px auto;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+
+        span.text {
+          padding: 0 16px;
+          color: #777;
+          text-align: center;
+          font-size: 13px;
+        }
+
+        span.line {
+          position: relative;
+          -webkit-box-flex: 1;
+          -ms-flex: 1 1 0px;
+          flex: 1 1 0px;
+          top: 0.5em;
+          height: 0;
+          border-bottom: 1px solid #ddd;
+          display: block;
+        }
+      }
+
+    }
+    .has-attachment {
+      &.has-payload-btn {
+        .chat-bubble-wrapper {
+          padding-bottom: 28px;
+        }
+        .chat-bubble.system {
+          position: relative;
+          margin-bottom: 24px;
+          width: 100%;
+          border-bottom-left-radius: 0px;
+          border-bottom-right-radius: 0px;
+          .open-payload-btn {
+            position: absolute;
+            background: $color-primary;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            color: $color-white;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 8px 0px;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            cursor: pointer;
+            &--disabled{
+              opacity: 0.4;
+              cursor: not-allowed;
+              pointer-events: none;
+            }
+          }
+        }
+      }
+    }
+
+    .chat-bubble-wrapper {
+      display: flex;
+      display: -ms-flexbox;
+      margin-top: $chatBubbleMargin;
+
+      &.user {
+        flex-direction: row-reverse;
+        -ms-flex-direction: row-reverse;
+        text-align: left;
+      }
+    }
+    .avatar-holder {
+      height: $chatAvatarWidth;
+      flex-basis: $chatAvatarWidth;
+
+      img {
+        border-radius: 100px;
+        width: $chatAvatarWidth;
+        margin-top: 4px;
+      }
+    }
+
+    .attachment {
+      flex-basis: 15%;
+      text-align: left;
+
+      button.icon:before {
+        font-size: 36px;
+      }
+    }
+
+    .chat-options-holder {
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: $chatBubbleLeftMargin + $chatAvatarWidth;
+      margin-top: 5px;
+
+      > .option-holder-message {
+        background: #f8f8f8;
+        border-radius: 15px 15px 0px 0px;
+        border: 0.5px solid #e2e7e9;
+      }
+
+      svg {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        &.balanced {
+          fill: rgb(0, 207, 0);
+        }
+        &.assertive {
+          fill: red;
+        }
+        &.text-weak {
+          fill: #ccc;
+        }
+      }
+
+      .rating-panel {
+        padding: 4px 2px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        i {
+          cursor: pointer;
+          position: relative;
+          top: 2px;
+        }
+      }
+    }
+
+    .chat-bubble {
+      padding: 8px 12px;
+      margin-left: $chatBubbleLeftMargin;
+      border-radius: $chatBubbleBorderRadius;
+      background: $chatBubbleSystemBgColorDefault;
+      max-width: 88%;
+      display: inline-block;
+
+      p{
+        line-height: 21px;
+      }
+
+      &.user {
+        background-color: $color-primary;
+        color: $color-white;
+        font-weight: 500;
+        box-shadow: 0 1px 2px 0 rgba($color-gray, 0.5);
+        margin-left: $chatAvatarWidth + $chatBubbleLeftMargin;
+      }
+      &.system {
+        background-color: $chatBubbleSystemBgColor;
+      }
+      &.holds-typing-indicator {
+        border-radius: 12px !important;
+        margin-left: -20px !important;
+        margin-bottom: 35px;
+      }
+
+      .links {
+        line-height: 1.3em;
+        margin-top: 5px;
+
+        &.truncate li {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      a {
+        text-decoration: none;
+        color: $chatLinkListColor;
+        text-decoration: underline;
+      }
+
+      li a {
+        font-size: 13px;
+        font-weight: bold;
+        color: $chatInMessageLinkColor;
+        text-decoration: none;
+      }
+
+      .chat-bubble__link-container {
+        margin: 12px -12px -10px;
+        border: solid 1px $chatBubbleSystemBgColor;
+        border-radius: 0 0 $chatBubbleBorderRadius $chatBubbleBorderRadius;
+
+        .chat-bubble__link {
+          border: none;
+          border-bottom: solid 1px $chatBubbleSystemBgColor;
+          padding: 16px;
+          background-color: $color-white;
+          background-image: linear-gradient($color-white, $color-white);
+          text-align: left;
+          font-size: $promptOptionsButtonFontSize;
+          transition: 0.3s;
+          color: $color-primary;
+
+          &:hover {
+            background-image: inherit;
+            background-origin: inherit;
+            background-clip: inherit;
+            background: $hoverListButtonColor;
+            color: $color-primary-darkest;
+          }
+
+          &--external{
+            background: $color-primary;
+            padding: 8px;
+            text-align: center;
+            color: #fff;
+
+            &:hover {
+              background-color: darken($color-primary, 10%);
+              color: #fff;
+            }
+          }
+
+          &--external-exited {
+            background: $color-gray !important;
+            color: $color-white;
+
+            &:hover {
+              background-color: darken($color-gray, 10%) !important;
+              color: $color-white;
+            }
+          }
+
+          &--external-taken {
+            background: $color-green-lightest !important;
+            color: $color-white;
+
+            &:hover {
+              background-color: darken($color-green-lightest, 10%) !important;
+              color: $color-white;
+            }
+          }
+        }
+
+        .toggle-showall-btn {
+          border: none;
+          padding: 12px;
+          background-color: $color-primary;
+          color: $color-white;
+          font-size: $promptButtonFontSize;
+          transition: 0.3s;
+          &:hover {
+            background-color: darken($color-primary, 10%);
+          }
+        }
+
+        > *:last-child {
+          border-radius: 0 0 $chatBubbleBorderRadius $chatBubbleBorderRadius;
+        }
+      }
+    }
+  }
+  .chat-prompt-answer {
+    margin: 0px 2px;
+    display: inline-block;
+    border: solid 0.5px #e2e7e9;
+    padding: 0.5px;
+    background-image: linear-gradient(#ffffff, #ffffff),
+      linear-gradient(277deg, #237db3, #174f83 40%, #0b1d50);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    transition: background-color 0.25s;
+    color: #4a4a4a;
+    font-size: $promptButtonFontSize;
+
+    .text {
+      padding: 8px;
+    }
+  }
+}
+
+
+.chat-bubble__answer-text{
+  p{
+    margin: 0;
+    min-height: 16px;
+  }
+}

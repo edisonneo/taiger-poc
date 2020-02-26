@@ -1,0 +1,133 @@
+.invisible {
+  opacity: 0;
+}
+.text-weak {
+  color: #CCC;
+}
+.text-muted {
+  color: #999;
+}
+.text-charcoal {
+  color: #555;
+}
+
+.mt-3 {
+	margin-top: 3px;
+}
+.mt-5 {
+	margin-top: 5px;
+}
+.mt-10 {
+	margin-top: 10px;
+}
+.mt-15 {
+	margin-top: 15px;
+}
+.mb-5 {
+	margin-bottom: 5px;
+}
+.mb-10 {
+	margin-bottom: 10px;
+}
+.mb-15 {
+	margin-bottom: 15px;
+}
+.mr-5 {
+  margin-right: 5px;
+}
+.mr-10 {
+	margin-right: 10px;
+}
+.mr-15 {
+	margin-right: 15px;
+}
+.ml-auto{
+  margin-left: auto;
+}
+.ml-5 {
+  margin-left: 5px;
+}
+.ml-10 {
+	margin-left: 10px;
+}
+.ml-15 {
+	margin-left: 15px;
+}
+.w-100{
+  width:100%;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-xs {
+  font-size: 11px;
+
+  &.align-bottom {
+    position: relative;
+    top: -1px;
+  }
+}
+
+.text-sm {
+  font-size: 12px;
+}
+
+.img-rounded{
+  border-radius: 6px;
+}
+
+.fade {
+  transition: opacity 0.8s;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.table-row {
+  display: table-row;
+}
+
+.table-cell {
+  display: table-cell;
+}
+
+.preline-text {
+  white-space: pre-line;
+}
+
+.single-line-elipsis {
+  height: 1em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.container-elipsis {
+  height: 2em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.description-truncated {
+  overflow: hidden !important;
+  max-height: 6.4em;
+  font-size:13px !important;
+
+  &.disable {
+    max-height: inherit !important;
+    min-height: 6.4em;
+  }
+}
+
+.brand-bg {
+  background: $backgroundColor;
+  // background-image: none;
+  // background-repeat: no-repeat;
+  // background-attachment: fixed;
+  // background-position: center;
+  // background-size: 55%;
+}

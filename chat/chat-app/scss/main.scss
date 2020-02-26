@@ -1,0 +1,522 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: '../lib/ionic/fonts' !default;
+
+@import 'utilities/variables';
+@import 'utilities/helpers';
+@import 'utilities/animations';
+
+// Import custom fonts
+@import 'scss/typeface';
+
+// Include all of Ionic
+@import 'www/lib/ionic/scss/ionic';
+
+$brandFont: 'Hind Siliguri', Helvetica, Arial;
+$chatTitleFontWeight: 600;
+$chatTitleFontSize: 15px;
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+i,
+u,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+fieldset,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+input {
+  font-family: $brandFont;
+}
+
+ion-content {
+  overflow-scroll: true;
+}
+
+.selectable {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+.lightbox {
+  z-index: 100000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba($color-black, 0.87);
+
+  #closeLightboxBtn {
+    position: absolute;
+    top: 43px;
+    right: 0;
+    color: $color-white;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .lightbox__footer {
+    display: flex;
+    flex-direction: row;
+    padding: 0 16px;
+    color: #ffffff;
+    justify-content: space-between;
+  }
+
+  .lightbox__img-container{
+    // IE requires min height set if not div will default to 100% height
+    min-height: 20px;
+  }
+}
+
+.menu-content {
+  border-radius: 14px
+}
+
+// apply bg reset on all header bars (not just ion-nav-bar)
+.bar {
+  background: 0 0;
+}
+
+.bar.bar-positive {
+  border-color: transparent;
+}
+
+.bar-positive {
+  .button {
+    &.button-clear {
+      display: flex;
+      align-items: center;
+      width: 32px;
+      svg {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+  #refreshBtn {
+    justify-content: center;
+    font-size: 22px;
+    min-width: 0px;
+  }
+  #openFeedbackBtn {
+    min-width: 0px;
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+// General App Styles
+.button.button-positive {
+  background-color: $color-primary;
+  &:focus,
+  &:active {
+    background-color: darken($color-primary, 15%);
+  }
+}
+
+.button.button-brand {
+  background-color: $color-primary;
+  font-family: $brandFont !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  min-height: 25px !important;
+  margin-bottom: 3px;
+  color: white;
+}
+
+#languageSelectionMenu {
+  position: fixed;
+  bottom: 48px;
+  right: 4px;
+
+  ul > *:not(:last-child) {
+    margin-bottom: 4px;
+  }
+
+  li {
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.brand-icons > .icon {
+  color: $color-primary;
+}
+
+.icon {
+  &.icon-1-5x {
+    font-size: 1.5rem;
+  }
+  &.icon-2x {
+    font-size: 2rem;
+  }
+}
+
+.attachment-icon > .icon {
+  color: $color-primary;
+}
+
+.img-circle {
+  border-radius: 100%;
+}
+
+.nomargins {
+  margin: 0 !important;
+}
+
+.nav-right-logo {
+  z-index: 1000;
+  position: absolute;
+  right: 6px;
+  width: 47px;
+  // padding: 0 4px;
+  padding: 4px 4px 0;
+  // background: #FFF;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.bar {
+  .button.icon {
+    &:before {
+      font-size: 26px !important;
+    }
+  }
+
+  h1.title {
+    margin-top: 2px;
+  }
+
+  &.bar-subheader {
+    .button.icon {
+      line-height: 2.3em;
+      font-size: 16px;
+    }
+  }
+}
+
+/**
+ * Custom Header Bars
+ */
+
+// header1
+.bar.header-1 {
+  height: 45px;
+  padding: 8px 10px 5px;
+
+  .bar-brand__title {
+    font-size: 20px;
+    padding-top: 6px;
+  }
+
+  .bar-brand__logo {
+    max-width: 40px;
+    max-height: 32px;
+    margin-right: 8px;
+  }
+
+  .bar-brand__close.button-clear.ion-ios-close-empty {
+    padding-top: 8px;
+  }
+
+  .bar-brand__close.button-clear.ion-ios-close-empty:before {
+    font-size: 26px;
+  }
+}
+
+.has-subsubheader {
+  top: 117px;
+}
+
+/**
+ * Content Area
+ */
+$headerHeight: 44px;
+.content-area {
+  padding-top: $headerHeight; // one header
+  overflow-y: scroll;
+
+  &.content-area--twoheaders {
+    padding-top: $headerHeight * 2;
+  }
+}
+
+/**
+ * Ionic Popup Styling
+ */
+$popupBorderRadiusPx: 6px;
+
+.popup {
+  border-radius: $popupBorderRadiusPx !important;
+
+  .popup-buttons button {
+    border-radius: $popupBorderRadiusPx;
+    border-radius: $popupBorderRadiusPx;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  input[type='checkbox'] {
+    width: inherit;
+  }
+
+  .email-input {
+    text-align: center;
+  }
+}
+
+/**
+* Datepicker Styling
+* (ionic-datepicker)
+*/
+.ionic_datepicker_popup {
+  .popup-body .selected_date_full {
+    background-color: $color-primary !important;
+  }
+
+  .popup-buttons button {
+    background-color: $color-primary !important;
+
+    &:nth-of-type(1) {
+      border-bottom-left-radius: $popupBorderRadiusPx;
+    }
+    &:nth-of-type(2) {
+      border-bottom-right-radius: $popupBorderRadiusPx;
+    }
+  }
+
+  .selected_date {
+    background-color: $color-primary !important;
+  }
+
+  .today {
+    border: 1px solid $color-primary !important;
+  }
+
+  .popup-body {
+    border-radius: 6px;
+
+    // force select element to fill up its parent
+    .item-select select {
+      left: 0px !important;
+      border: none;
+      padding: 0;
+      width: 100%;
+      text-align: center;
+      max-width: inherit;
+      padding-right: 28px !important;
+    }
+
+    .month_select,
+    .year_select {
+      border-bottom: 1px solid $color-primary !important;
+
+      // arrows
+      &:after {
+        color: $color-primary !important;
+      }
+    }
+
+    .button-clear {
+      color: $color-primary !important;
+    }
+
+    .picker-number {
+      font-size: 32px;
+      padding-top: 19px;
+      font-weight: bold;
+      color: $color-gray-darkest;
+    }
+  }
+}
+
+.button-bar.tight {
+  a.button {
+    font-size: 13px;
+    font-weight: bold;
+  }
+}
+
+.item.padding-thin {
+  padding: 10px 10px;
+}
+
+.bar.bar-stable {
+  background-image: none;
+}
+
+ng-map {
+  height: 233px;
+  width: 100%;
+}
+
+@import 'components/voice-visualization';
+@import 'components/autocomplete-suggestions';
+@import 'components/star-ratings';
+@import 'components/landing-page';
+@import 'components/carousel';
+@import 'components/feedback-panel';
+@import 'components/progress-bar';
+@import 'components/chat-detail';
+@import 'components/chat-header';
+@import 'components/chat-content';
+@import 'components/chat-footer';
+@import 'components/chat-log';
+@import 'components/button';
+@import 'components/typing-indicator';
+@import 'components/external-link-iframe';
+
+table.three-col {
+  td {
+    width: 33.33%;
+    padding: 6px;
+  }
+}
+
+table.content-middle {
+  td {
+    vertical-align: middle;
+  }
+}
+
+// Modify livechat integration style
+#chat-widget-container {
+  width: 100% !important;
+
+  &.post-survey-activated::before {
+    content: "";
+    background-color: #ffffff;
+    z-index: 9999;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    height: 50px;
+    width: 48px;
+    border-top-right-radius: 10px;
+  }
+
+  &.post-survey-activated.mobile::before {
+    right: 0;
+    top: 0;
+  }
+
+  iframe#chat-widget {
+    background-color: rgba($color-white, 0.8) !important;
+  }
+}
+
+// Temp way to override main styles & add custom styles
+.distance-label {
+  display: inline-block;
+  padding: 0px 6px;
+  background: $color-gray-darker;
+  font-size: 11px;
+  color: $color-white;
+  border-radius: 3px;
+}
+
+.show-more-panel {
+  text-align: center;
+
+  a {
+    font-size: 12px;
+    font-weight: bold;
+  }
+}

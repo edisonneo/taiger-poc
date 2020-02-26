@@ -1,0 +1,11 @@
+<section>
+  <ion-spinner icon="spiral" ng-if="isLoading"></ion-spinner>
+  <div class="autocomplete-suggestions" ng-repeat="suggestion in suggestions">
+    <a
+      ng-mouseover="highlightSuggestion(suggestion)"
+      ng-class="{'active': suggestion === activeSuggestion }"
+      ng-click="selectSuggestion(suggestion)"
+      >{{ suggestion }}</a
+    >
+  </div>
+</section>

@@ -1,0 +1,167 @@
+.send-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 2px;
+  display: flex;
+  align-items: center;
+  width: 24px;
+  min-width: 0;
+  min-height: 0 !important;
+  &.ng-enter, .ng-leave{
+    right: 2px;
+    opacity: 0;
+  }
+  &.ng-enter,
+  &.ng-leave.ng-leave-active {
+    transition: all 0.2s ease-in-out;
+    right: -5px;
+    opacity: 0;
+  }
+  &.ng-leave,
+  &.ng-enter.ng-enter-active {
+    transition: all 0.2s ease-in-out 0.2s;
+    right: 2px;
+    opacity: 1;
+  }
+  svg {
+    height: 20px;
+    width: 20px;
+    path{
+      fill: $color-primary;
+    }
+  }
+}
+
+.voice-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 2px;
+  display: flex;
+  align-items: center;
+  width: 24px;
+  min-width: 0;
+  min-height: 0 !important;
+  svg{
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    path{
+      fill: $color-primary;
+    }
+  }
+  &.ng-enter, .ng-leave{
+    right: 2px;
+    opacity: 0;
+  }
+  &.ng-enter,
+  &.ng-leave.ng-leave-active {
+    transition: all 0.2s ease-in-out;
+    right: -5px;
+    opacity: 0;
+  }
+  &.ng-leave,
+  &.ng-enter.ng-enter-active {
+    transition: all 0.2s ease-in-out 0.2s;
+    right: 2px;
+    opacity: 1;
+  }
+}
+.voice-btn--activated {
+  border-color: transparent;
+  background-color: $color-primary;
+  color: $color-white !important;
+  border-radius: 50%;
+  position: fixed;
+  bottom: -26px;
+  right: -32px;
+  height: 100px;
+  width: 100px;
+  transform-origin: center center;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  &.ng-enter, .ng-leave{
+    transition: 0.3s;
+    transform: scale(0);
+  }
+  &.ng-enter,
+  &.ng-leave.ng-leave-active {
+    animation-name: voice-recording-stop;
+    animation-duration: 0.3s;
+  }
+  &.ng-leave,
+  &.ng-enter.ng-enter-active {
+    animation-name: voice-recording-start;
+    animation-duration: 0.3s;
+  }
+  svg{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    path{
+      fill: $color-white;
+    }
+  }
+
+}
+
+.chat-prompt-btn {
+  cursor: pointer;
+  margin: 4px 2px;
+  border-radius: 2.5px;
+  display: inline-block;
+  border: solid .5px transparent;
+  background-image: linear-gradient($color-white, $color-white), linear-gradient(277deg, lighten($color-primary, 11%), $color-primary 40%, darken($color-primary, 33%));
+  padding: 0.5px;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  transition: background-color 0.25s;
+  color: $color-gray-darkest;
+  font-size: $promptButtonFontSize;
+  position: relative;
+
+  .text {
+    padding: 8px;
+  }
+
+  ion-spinner{
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  &--active{
+    &:hover {
+      background-image: inherit;
+      background-origin: inherit;
+      background-clip: inherit;
+      background: $color-primary;
+      color: $color-white;
+    }
+  }
+
+  &--disabled{
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.chat-cta-button {
+  width: 65%;
+  margin-bottom: 25px;
+  margin-top: -15px;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 6px;
+}

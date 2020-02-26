@@ -1,0 +1,221 @@
+.animation-delay{
+  animation-delay: 0.1s;
+  &--xs{
+    animation-delay: 0.2s;
+  }
+  &--sm{
+    animation-delay: 0.4s;
+  }
+  &--md{
+    animation-delay: 0.6s;
+  }
+  &--lg{
+    animation-delay: 0.8s;
+  }
+
+}
+
+
+.ion-spin, .ion-loading-a, .ion-loading-b, .ion-loading-c, .ion-loading-d, .ion-looping, .ion-refreshing, .ion-ios7-reloading { -webkit-animation: spin 1s infinite linear; -moz-animation: spin 1s infinite linear; -o-animation: spin 1s infinite linear; animation: spin 1s infinite linear; }
+
+.progress-bar-animated {
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+/**
+ * Handle sliding animation for chat bubbles
+ */
+ .slide-right{
+  position:relative;
+  left: -150%;
+  -webkit-animation: slide 0.35s forwards;
+  -webkit-animation-delay: 0s;
+  animation: slide 0.35s forwards;
+  animation-delay: 0s;
+  animation-timing-function: ease;
+}
+
+.fade-up{
+  position: relative;
+  top: 30px;
+  opacity: 0;
+  -webkit-animation-name: fade-up;
+  -webkit-animation-duration: 0.35s;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-timing-function: ease;
+  animation-name: fade-up;
+  animation-duration: 0.35s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease;
+}
+
+.feedback-fade-up.ng-enter{
+  position: relative;
+  top: 30px;
+  opacity: 0;
+  -webkit-animation-name: fade-up;
+  -webkit-animation-duration: 0.35s;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-timing-function: ease;
+  animation-name: fade-up;
+  animation-duration: 0.35s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease;
+}
+
+.feedback-fade-up.ng-leave {
+  animation: fade-down 0.025s linear;
+}
+
+.disappear {
+  opacity: 0;
+  -webkit-animation-name: fade-down;
+  -webkit-animation-duration: 0.35s;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-timing-function: ease;
+  animation-name: fade-down;
+  animation-duration: 0.35s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease;
+}
+
+.exit{
+  top: 0px;
+  opacity: 1;
+  -webkit-animation: fade-down 0.25s forwards;
+  -webkit-animation-delay: 0s;
+  animation: fade-down 0.25s forwards;
+  animation-delay: 0s;
+}
+
+.fade-in-down{
+  transform: translateY(-30px);
+  opacity: 0;
+  -webkit-animation-name: fade-in-down;
+  -webkit-animation-duration: 0.3s;
+  -webkit-animation-fill-mode: forwards;
+  animation-name: fade-in-down;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.pop-in {
+  -webkit-animation-name: pop-in;
+  -webkit-animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
+  animation-name: pop-in;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+
+
+@-webkit-keyframes slide {
+  100% { left: 0; }
+}
+
+@keyframes slide {
+  100% { left: 0; }
+}
+
+@-webkit-keyframes fade-up {
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-down {
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-down {
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fade-in-down {
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-down {
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes pop-in {
+  0% { transform: scale(0) }
+  10%   { transform: scale(0.3) }
+  60%   { transform: scale(1.1) }
+  100%   { transform: scale(1) }
+
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0) }
+  10%   { transform: scale(0.3) }
+  60%   { transform: scale(1.1) }
+  100%   { transform: scale(1) }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bulge {
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@-moz-keyframes spin { 0% { -moz-transform: rotate(0deg); }
+  100% { -moz-transform: rotate(359deg); } }
+@-webkit-keyframes spin { 0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(359deg); } }
+@-o-keyframes spin { 0% { -o-transform: rotate(0deg); }
+  100% { -o-transform: rotate(359deg); } }
+@-ms-keyframes spin { 0% { -ms-transform: rotate(0deg); }
+  100% { -ms-transform: rotate(359deg); } }
+@keyframes spin { 0% { transform: rotate(0deg); }
+  100% { transform: rotate(359deg); } }
+.ion-loading-a { -webkit-animation-timing-function: steps(8, start); -moz-animation-timing-function: steps(8, start); animation-timing-function: steps(8, start); }
+
+/** Progress Bar From Bootstrap **/
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 1rem 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes voice-recording-start {
+  0% { transform: scale(0) }
+  10%   { transform: scale(0.3) }
+  60%   { transform: scale(1.1) }
+  100%   { transform: scale(1) }
+}
+
+@keyframes voice-recording-stop {
+  0% { transform: scale(1) }
+  10%   { transform: scale(1.1) }
+  20%   { transform: scale(0.3) }
+  100%   { transform: scale(0) }
+}
