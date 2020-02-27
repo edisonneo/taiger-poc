@@ -20,7 +20,6 @@
     'ion-place-tools',
     'ngMap',
     'ionic-datepicker',
-    '720kb.tooltips',
     'ui.swiper',
     'angular-click-outside'
   ]);

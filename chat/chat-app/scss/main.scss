@@ -23,7 +23,7 @@ $ionicons-font-path: '../lib/ionic/fonts' !default;
 @import 'utilities/animations';
 
 // Import custom fonts
-@import 'scss/typeface';
+@import 'typeface';
 
 // Include all of Ionic
 @import 'www/lib/ionic/scss/ionic';
@@ -155,15 +155,6 @@ ion-content {
     color: #ffffff;
     justify-content: space-between;
   }
-
-  .lightbox__img-container{
-    // IE requires min height set if not div will default to 100% height
-    min-height: 20px;
-  }
-}
-
-.menu-content {
-  border-radius: 14px
 }
 
 // apply bg reset on all header bars (not just ion-nav-bar)
@@ -462,6 +453,7 @@ ng-map {
 @import 'components/button';
 @import 'components/typing-indicator';
 @import 'components/external-link-iframe';
+@import 'components/chat-web-fallback';
 
 table.three-col {
   td {
@@ -520,3 +512,9 @@ table.content-middle {
     font-weight: bold;
   }
 }
+
+em {
+    font-style: normal !important;
+    color: #1ab394 !important;
+}
+

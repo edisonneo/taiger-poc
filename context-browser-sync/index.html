@@ -7,7 +7,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>TAIGER - iConverse</title>
+    <title>TAIGER - Converse</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width" />
 
@@ -21,19 +21,19 @@
       }
     </style>
 
-    <!-- start: iconverse chat widget script -->
+    <!-- start: converse chat widget script -->
     <script async data-minify>
       // Development version: botId will be overridden during `gulp serve`
-      // Deployed version: botId will be overridden in iconverse-bot-server jsp file
-      var botId = '0d5bc393-c38a-c292-2944-78c2a01cc2a6';
+      // Deployed version: botId will be overridden in converse-bot-server jsp file
+      var botId = 'ac884001-9226-41ca-b0c1-9ad796897a96';
 
       // Development version: chatBaseUrl will be overriden during `gulp serve` with url from BrowserSync
-      // Deployed version: chatBaseUrl is kept empty when serve by iconverse-bot-server
+      // Deployed version: chatBaseUrl is kept empty when serve by converse-bot-server
       var chatBaseUrl = 'http://localhost:3001';
 
       // Development version: serverUrl will be overriden during `gulp serve`
-      // Deployed version: serverUrl will be overridden in iconverse-bot-server jsp file
-      var serverUrl = 'http://localhost:8080/iconverse-bot-server/';
+      // Deployed version: serverUrl will be overridden in converse-bot-server jsp file
+      var serverUrl = 'https://sposgva-dev.taiger.io/iconverse-bot-server/';
 
       var setupScriptUrl =
         (chatBaseUrl ? chatBaseUrl + '/chat' : serverUrl + '/base') + '/widget/js/setup.js';

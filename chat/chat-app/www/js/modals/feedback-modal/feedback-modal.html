@@ -11,37 +11,46 @@
   <div class="feedback-panel" ng-class="{'ionic-styles center-align': isMobile}">
     <div class="feedback-panel-content card">
       <div class="item item-text-wrap text-center">
-        <h3> <b>We'd love to hear what you thought about <br>{{ app.appOptions.feedbackAppName ? app.appOptions.feedbackAppName : app.appOptions.appName }}</b> </h3>
+        <h3> <b>We'd love to hear what you thought about <br>{{ app.appOptions.appName }}</b> </h3>
         <div id="feedbackStarRatings" class="feedback-panel__container mt-10 feedback-panel__container--large">
-          <div class="feedback-panel__star-container">
-            <p class="feedback-panel__label">Poor</p>
-            <form class="feedback-panel__stars">
-              <label ng-repeat="i in [].constructor(6) track by $index">
-                  <input type="radio" name="stars" value="{{ $index + 1 }}" ng-model="_feedbackModal.entry.ratingNum"/>
-                  <span ng-repeat="j in [].constructor($index + 1) track by $index" class="icon">★</span>
-              </label>
-            </form>
-            <p class="feedback-panel__label">Excellent</p>
+          <div class="feedback-panel__rating-container">
+            <div class="feedback-panel__rating-left">
+              <p class="feedback-panel__label">Poor</p>
+            </div>
+            <div class="feedback-panel__rating-right">
+              <p class="feedback-panel__label">Excellent</p>
+            </div>
           </div>
           <br>
-          <small ng-if="!_feedbackModal.entry.ratingNum" class="positive text-brand">
-            <svg class="icon-arrow-up" aria-hidden="true" focusable="false" width="20px" height="20px" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
-              <path d="M348.3 216.4c-5 5.1-13.3 5.1-18.4.1L269 155.8v231.3c0 7.1-5.8 12.9-13 12.9s-13-5.8-13-12.9V155.8l-60.9 60.8c-5.1 5-13.3 4.9-18.4-.1-5-5.1-5-13.2.1-18.3l83-82.4c1.2-1.1 2.5-2 4.1-2.7 1.6-.7 3.3-1 5-1 3.4 0 6.6 1.3 9.1 3.7l83 82.4c5.2 4.9 5.3 13.1.3 18.2z" fill="#387ef5"/>
-            </svg>
-            <br>
-            click on a star
-          </small>
+          <div class="feedback-panel__star-container">
+            <form class="feedback-panel__stars">
+              <label ng-repeat="i in [].constructor(6) track by $index">
+                <input type="radio" name="stars" value="{{ $index + 1 }}" ng-model="_feedbackModal.entry.ratingNum"/>
+                <span ng-repeat="j in [].constructor($index + 1) track by $index" class="icon">★</span>
+              </label>
+            </form>
+          </div>
+          <br>
+          <div class="feedback-panel__click-container">
+            <small ng-if="!_feedbackModal.entry.ratingNum" class="text-brand">
+              <svg class="icon-arrow-up" aria-hidden="true" focusable="false" width="20px" height="20px" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+                <path d="M348.3 216.4c-5 5.1-13.3 5.1-18.4.1L269 155.8v231.3c0 7.1-5.8 12.9-13 12.9s-13-5.8-13-12.9V155.8l-60.9 60.8c-5.1 5-13.3 4.9-18.4-.1-5-5.1-5-13.2.1-18.3l83-82.4c1.2-1.1 2.5-2 4.1-2.7 1.6-.7 3.3-1 5-1 3.4 0 6.6 1.3 9.1 3.7l83 82.4c5.2 4.9 5.3 13.1.3 18.2z" fill="#666"/>
+              </svg>
+              <br>
+              click on a star
+            </small>
+          </div>
         </div>
 
         <br>
 
         <h3> <b>Any comments? (Optional)</b> </h3>
 
-        <textarea ng-if="!isMobile" ng-model="_feedbackModal.entry.comments" class="form-control" rows="3" placeholder="Please tell us how we can improve {{ app.appOptions.feedbackAppName ? app.appOptions.feedbackAppName : app.appOptions.appName }}"></textarea>
+        <textarea ng-if="!isMobile" ng-model="_feedbackModal.entry.comments" class="form-control" rows="3" placeholder="Please tell us how we can improve {{ app.appOptions.appName }}"></textarea>
 
         <div ng-if="isMobile" class="nomargins list list-inset">
           <label class="item item-input">
-            <textarea ng-model="_feedbackModal.entry.comments" rows="3" placeholder="Please tell us how we can improve {{ app.appOptions.feedbackAppName ? app.appOptions.feedbackAppName : app.appOptions.appName }}"></textarea>
+            <textarea ng-model="_feedbackModal.entry.comments" rows="3" placeholder="Please tell us how we can improve {{ app.appOptions.appName }}"></textarea>
           </label>
         </div>
         <!-- <form ng-submit="vm.submitFeedback()"> -->
@@ -52,14 +61,14 @@
             </button>
           </form>
 
-          <button ng-if="_feedbackModal.isShowExitChatBtn && !app.appOptions.isFeedbackForced"
+          <button ng-if="_feedbackModal.isShowExitChatBtn"
                   ng-click="_feedbackModal.exitChat()"
                   class="mt-10 button button-light mr-15 button-small"
                   ng-class="{'mt-10': isMobile}">
             Close & Ask Me Later
           </button>
 
-          <button ng-if="_feedbackModal.isShowExitChatBtn && !app.appOptions.isFeedbackForced"
+          <button ng-if="_feedbackModal.isShowExitChatBtn"
                   ng-click="_feedbackModal.saveSkipFeedbackPreferenceAndCloseChat()"
                   class="mt-10 button button-light ml-15 button-small"
                   ng-class="{'mt-10': isMobile}">

@@ -6,7 +6,7 @@
       ng-click="vm.closeMediaLightbox()"
     >
     </a>
-    <div class="lightbox__img-container">
+    <div>
       <img ng-src="{{vm.lightboxMedias[vm.lightboxMediaSelectedIndex].url}}" />
       <div class="lightbox__footer">
         <div>
@@ -117,8 +117,11 @@
                 <slide
                   ng-repeat="media in vm.theEl.properties.topPanel.carouselMedia"
                   >
-                    <div class="swiper__img-container">
-                      <img ng-click="vm.onClickSlide(media, $index)" src="{{media.url}}" alt="">
+                    <div
+                      ng-click="vm.onClickSlide(media, $index)"
+                      style="background-image: url({{media.url}})"
+                      class="slider-panel"
+                    >
                     </div>
                 </slide>
               </slides>

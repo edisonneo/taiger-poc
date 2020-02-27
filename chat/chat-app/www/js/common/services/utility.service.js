@@ -13,7 +13,7 @@
 
         var isIE11 = !isIE10 && agent.indexOf('.NET4.0E') > -1 && agent.indexOf('.NET4.0C') > -1;
 
-        return isIE10 || isIE11;
+        return isIE10 || isIE11 || false;
       },
 
       replaceAll: function (str, search, replacement) {

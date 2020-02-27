@@ -128,32 +128,17 @@
   transition: background-color 0.25s;
   color: $color-gray-darkest;
   font-size: $promptButtonFontSize;
-  position: relative;
+
+  &:hover {
+    background-image: inherit;
+    background-origin: inherit;
+    background-clip: inherit;
+    background: $color-primary;
+    color: $color-white;
+  }
 
   .text {
     padding: 8px;
-  }
-
-  ion-spinner{
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  &--active{
-    &:hover {
-      background-image: inherit;
-      background-origin: inherit;
-      background-clip: inherit;
-      background: $color-primary;
-      color: $color-white;
-    }
-  }
-
-  &--disabled{
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
   }
 }
 

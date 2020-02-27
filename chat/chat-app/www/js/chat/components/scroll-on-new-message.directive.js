@@ -3,9 +3,9 @@
 
   angular.module('iconverse').directive('scrollOnNewMessage', scrollOnNewMessage);
 
-  scrollOnNewMessage.$inject = ['$rootScope', '$timeout', '$interval', 'UtilityService'];
+  scrollOnNewMessage.$inject = ['$rootScope', '$timeout', 'UtilityService'];
 
-  function scrollOnNewMessage ($rootScope, $timeout, $interval, UtilityService) {
+  function scrollOnNewMessage ($rootScope, $timeout, UtilityService) {
     return {
       restrict: 'A',
       link: function (scope, $elm) {
@@ -58,9 +58,7 @@
           var increment = 20;
 
           if (duration === 0) {
-            // element.scrollTop = element.scrollHeight;
             element.scrollTop = change;
-
             return;
           }
 

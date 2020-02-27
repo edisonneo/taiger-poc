@@ -3,23 +3,23 @@
 
   angular.module('iconverse').directive('chatBubble', chatBubble);
 
-  chatBubble.$inject = ['ChatService', 'IconverseService', '$rootScope', '$state', '$ionicViewSwitcher', 'ExternalLinkService'];
+  chatBubble.$inject = ['ChatService', 'IconverseService', '$rootScope', '$state'];
 
-  function chatBubble (ChatService, IconverseService, $rootScope, $state, $ionicViewSwitcher, ExternalLinkService) {
+  function chatBubble (ChatService, IconverseService, $rootScope, $state) {
     return {
       scope: {
         message: '=',
+        avatarImageUrl: '<',
         onClickLink: '&', // passes out the clicked link
         onClickAttachment: '&', // passes out the clicked message
         onClickChoice: '&', // passes out the clicked message
         onClickRestart: '&',
+        onDropdownSelect: '&', // passes out the selected option in dropdown to the message
         linkLimit: '=?', // integer. specify the limit of links shown before the list is truncated
         onShowMore: '&', // triggered when show more is clicked
         onShowLess: '&', // triggered when show less is clicked
         isAvatarVisible: '=',
-        isActiveExternalUrlBtn: '=',
-        isActiveMsg: '=', // checks if the bubble is the most recent one and at the bottom of the chat window
-        isLivechatLoading: '=',
+        isCurrentActiveBubble: '=',
         linksDisplayTypes: '=', // ['button-list', 'side-attachment']
         entryTransition: '=' // the type of transition the chat bubble enters with ['fade-up', 'slide-right']
       },
@@ -35,18 +35,10 @@
         scope.sourceIsUser = ChatService.isMessageFromUser(scope.message); // currently binary
 
         scope.hasAttachment = ChatService.isMessageWithAttachment(scope.message) && scope.message.isLast;
-
-        scope.isSurveyTaken = function (url) {
-          return ExternalLinkService.isCompleted(scope.message.id, url);
-        };
-
-        scope.getSurveyStatus = function (url) {
-          return ExternalLinkService.getStatus(scope.message.id, url);
-        };
-
-        scope.shouldDisableSurveyButton = function (url) {
-          return ['taken', 'exited'].indexOf(scope.getSurveyStatus(url)) > -1 || !scope.isActiveExternalUrlBtn;
-        };
+        scope.isFallbackSearch = Boolean(
+          angular.isObject(scope.message.payload)
+          && scope.message.payload.type === 'iSearchResult'
+        );
 
         // determine how to display message with lists/links, by reading the passed in config option
         if (ChatService.isMessageWithList(scope.message)) {
@@ -56,12 +48,14 @@
             && !_.includes(scope.linksDisplayTypes, 'side-attachment');
         }
 
-        scope.getLinkText = function (link) {
-          var status = scope.getSurveyStatus(link.url);
-          if (status === 'taken') return 'Survey Completed';
-          if (status === 'exited') return 'Survey Ended';
+        if (scope.isFallbackSearch) {
+          scope.isHideButtonList = true;
+          scope.isHideAttachmentList = true;
+        }
 
-          return link.text || link.buttonText;
+        scope.toWebFallbackList = function () {
+          ChatService.setLatestSelectedMessage(scope.message);
+          $state.go('app.chat-web-fallback');
         };
 
         scope.triggerFn = function (text) {
@@ -69,23 +63,11 @@
         };
 
         scope.clickLink = function (link) {
-          // TO DEVELOP (this is just a temp solution to open links in a new iframe)
           if (link.action === 'externalurl') {
-            var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             var surveyUrl = link.url;
-            var pageCount = link.numberOfPages;
-
-            if (iOS) {
-              window.open(surveyUrl, '_blank');
-              ChatService.processUserMessage('ios', null, null, null, true);
-              return false;
-            }
-
             $ionicViewSwitcher.nextDirection('forward');
             $state.go('app.external-link-iframe', {
-              surveyUrl: surveyUrl,
-              pageCount: pageCount,
-              messageId: scope.message.id
+              surveyUrl: surveyUrl
             });
           }
           else if (angular.isFunction(scope.onClickLink)) {
@@ -125,6 +107,10 @@
             // Trigger function declared in the directive parameters
             scope.onShowLess();
           }
+        };
+
+        scope.selectDropdownOption = function (option) {
+          scope.onDropdownSelect({ option: option });
         };
 
         scope.triggerLiveChat = function () {

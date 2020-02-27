@@ -20,7 +20,7 @@
     ng-class="{'user': sourceIsUser, 'system': !sourceIsUser, 'holds-typing-indicator': message.isProcessingMsg}"
   >
     <div ng-if="!sourceIsUser && isAvatarVisible" class="avatar-holder">
-      <img ng-class="{'invisible': message.isProcessingMsg}" src="img/avatar.png" />
+      <img ng-class="{'invisible': !message.isFirst}" ng-src="{{avatarImageUrl}}" />
     </div>
 
     <div
@@ -41,7 +41,7 @@
       </div>
 
       <!-- text -->
-      <div class="preline-text chat-bubble__answer-text" compile="message.text | buildLinks:'triggerFn'" data-tap-disabled="true"></div>
+      <div class="preline-text" compile="message.text | buildLinks:'triggerFn'"></div>
 
       <!-- links -->
       <div ng-if="message.links.length && !isHideButtonList" class="chat-bubble__link-container">
@@ -49,18 +49,10 @@
           ng-repeat="link in message.links | limitTo: linksLimitCount"
           ng-click="clickLink(link)"
           class="chat-bubble__link full-width"
-          ng-class="{
-            'chat-bubble__link--external': link.action,
-            'chat-bubble__link--external-exited': link.action && (getSurveyStatus(link.url) === 'exited' || !isActiveExternalUrlBtn),
-            'chat-bubble__link--external-taken': link.action && getSurveyStatus(link.url) === 'taken',
-          }"
-          ng-disabled="link.action && shouldDisableSurveyButton(link.url)"
+          ng-class="{ 'chat-bubble__link--external': link.action }"
           ng-if="message.links.length"
         >
-          {{ getLinkText(link) }}
-          <svg ng-if="isSurveyTaken(link.url)" width="12" height="8" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5.08471 9.46756L1.29164 5.73602L0 6.99776L5.08471 12L16 1.26174L14.7175 0L5.08471 9.46756Z" fill="white"/>
-          </svg>
+          {{ link.text || link.buttonText }}
         </button>
         <button
           ng-if="message.links.length > linksLimitCount"
@@ -71,24 +63,39 @@
         </button>
       </div>
 
+      <!-- Dropdown Options -->
+      <div class="chat-bubble__dropdown" ng-if="message.options">
+        <select name="" id=""
+          ng-disabled="!isCurrentActiveBubble"
+          ng-model="selectedDropdownOption"
+          ng-change="selectDropdownOption(selectedDropdownOption)"
+          ng-options="option.text for option in message.options">
+          <option value="">-- choose an option --</option>
+        </select>
+      </div>
+
       <!-- payload button -->
       <div
         ng-click="clickAttachment()"
         ng-if="!message.links.length && hasAttachment && !isHideAttachmentList"
-        class="open-payload-btn"
-        ng-class="{ 'open-payload-btn--disabled' : !isActiveMsg}"
+        class="open-payload-btn chat-bubble__link--external"
       >
         Click here to view details
+      </div>
+
+      <div
+        ng-if="isFallbackSearch"
+        ng-click="toWebFallbackList()"
+        class="open-payload-btn chat-bubble__link--external"
+      >
+        View Webpages
       </div>
     </div>
   </div>
 
   <!-- livechat button -->
   <div ng-if="message.agentAvailable" class="chat-options-holder">
-    <button ng-click="triggerLiveChat()"
-      ng-class="!isActiveMsg ? 'chat-prompt-btn--disabled' : 'chat-prompt-btn--active'"
-      class="chat-prompt-btn full-width">
-      <ion-spinner ng-if="isLivechatLoading" icon="ios-small"></ion-spinner>
+    <button ng-click="triggerLiveChat()" class="chat-prompt-btn full-width">
       <div class="text">
         Open Live Chat
       </div>
@@ -97,9 +104,7 @@
 
   <!-- start over button -->
   <div ng-if="message.subtopic === 'SessionExpired'" class="chat-options-holder">
-    <button ng-click="clickRestart()"
-      ng-class="!isActiveMsg ? 'chat-prompt-btn--disabled' : 'chat-prompt-btn--active'"
-      class="chat-prompt-btn full-width">
+    <button ng-click="clickRestart()" class="chat-prompt-btn full-width">
       <div class="text">
         Start Over
       </div>

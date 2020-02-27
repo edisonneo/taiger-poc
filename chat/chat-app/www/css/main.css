@@ -10295,9 +10295,6 @@ ion-content {
     color: #ffffff;
     justify-content: space-between; }
 
-.menu-content {
-  border-radius: 14px; }
-
 .bar {
   background: 0 0; }
 
@@ -10641,6 +10638,8 @@ autocomplete-suggestions {
   height: 100%;
   background: #fff;
   z-index: 1000; }
+  #chatLandingPage #customLandingPage {
+    height: 100%; }
   #chatLandingPage .landing-page-container {
     width: 100%;
     height: 100%;
@@ -10759,17 +10758,32 @@ feedback-panel {
     align-items: center;
     justify-content: center;
     width: 100%; }
+  .feedback-panel .feedback-panel__rating-container {
+    align-items: center;
+    justify-content: center;
+    width: 100%; }
+    .feedback-panel .feedback-panel__rating-container .feedback-panel__rating-left {
+      display: inline-block;
+      float: left; }
+    .feedback-panel .feedback-panel__rating-container .feedback-panel__rating-right {
+      display: inline-block;
+      float: right; }
+  .feedback-panel .feedback-panel__click-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; }
   .feedback-panel .feedback-panel__stars {
     display: inline-block;
     position: relative;
-    margin: 0px 12px 0px 0px;
-    font-size: 50px; }
+    margin: 0px 0px 0px 0px; }
     .feedback-panel .feedback-panel__stars label {
       position: absolute;
       top: 0;
       left: 0;
       height: 100%;
-      cursor: pointer; }
+      cursor: pointer;
+      font-size: 36px; }
       .feedback-panel .feedback-panel__stars label:last-child {
         position: static; }
       .feedback-panel .feedback-panel__stars label:nth-child(1) {
@@ -10978,15 +10992,14 @@ chat-detail-panel {
   font-weight: bold; }
 
 .bar.bar-brand {
-  background-color: #4a90e2;
+  background: #4a90e2;
   color: #fff;
-  display: -webkit-box;
   display: -ms-flexbox;
+  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
   -ms-flex-align: center;
+  -webkit-box-align: center;
   align-items: center;
-  transition: 0.3s;
   padding: 0;
   border: none; }
   .bar.bar-brand > .button + .button:last-child {
@@ -11156,7 +11169,8 @@ chat-detail-panel {
     .choices-panel .chat-prompt-btn .text {
       text-align: center;
       display: inline-block;
-      word-break: break-all; }
+      word-break: normal;
+      word-break: break-word; }
   .choices-panel .chat-prompt-answer {
     min-width: 75px;
     margin-bottom: 20px; }
@@ -11650,6 +11664,19 @@ table.content-middle td {
 
 #chat-widget-container {
   width: 100% !important; }
+  #chat-widget-container.post-survey-activated::before {
+    content: "";
+    background-color: #ffffff;
+    z-index: 9999;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    height: 50px;
+    width: 48px;
+    border-top-right-radius: 10px; }
+  #chat-widget-container.post-survey-activated.mobile::before {
+    right: 0;
+    top: 0; }
   #chat-widget-container iframe#chat-widget {
     background-color: rgba(255, 255, 255, 0.8) !important; }
 
@@ -11666,3 +11693,7 @@ table.content-middle td {
   .show-more-panel a {
     font-size: 12px;
     font-weight: bold; }
+
+em {
+  font-style: normal !important;
+  color: #1ab394 !important; }

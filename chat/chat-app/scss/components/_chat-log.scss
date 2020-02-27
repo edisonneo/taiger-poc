@@ -48,10 +48,6 @@
         }
       }
 
-      ol{
-        list-style: decimal;
-      }
-
       iframe.map-holder {
         width: 285px;
         height: 225px;
@@ -114,11 +110,6 @@
             border-bottom-left-radius: 16px;
             border-bottom-right-radius: 16px;
             cursor: pointer;
-            &--disabled{
-              opacity: 0.4;
-              cursor: not-allowed;
-              pointer-events: none;
-            }
           }
         }
       }
@@ -282,26 +273,6 @@
               color: #fff;
             }
           }
-
-          &--external-exited {
-            background: $color-gray !important;
-            color: $color-white;
-
-            &:hover {
-              background-color: darken($color-gray, 10%) !important;
-              color: $color-white;
-            }
-          }
-
-          &--external-taken {
-            background: $color-green-lightest !important;
-            color: $color-white;
-
-            &:hover {
-              background-color: darken($color-green-lightest, 10%) !important;
-              color: $color-white;
-            }
-          }
         }
 
         .toggle-showall-btn {
@@ -343,10 +314,8 @@
   }
 }
 
-
-.chat-bubble__answer-text{
-  p{
-    margin: 0;
-    min-height: 16px;
+.chat-bubble__dropdown{
+  select{
+    width: 100%;
   }
 }
