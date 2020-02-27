@@ -9,7 +9,7 @@
       chatEndpoint: 'https://sposgva-dev.taiger.io/iconverse-converse'
     },
     appOptions: {
-      botId: "fdb11ee7-1437-4220-8fa8-3a24f4809607",
+      botId: "ac884001-9226-41ca-b0c1-9ad796897a96",
       firstMessageTypingDelayMs: 400,
       typingDelayMs: 200,
       appName: 'iConverse',
