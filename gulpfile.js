@@ -76,7 +76,7 @@ gulp.task('browserSync:init', function() {
         { route: '/chat/chat-app', dir: config.chatAppPath + '/www' },
         { route: '/chat/widget', dir: config.chatWidgetPath + '/source' },
       ],
-      port: 3001,
+      port: 4200,
       notify: false,
     },
     function() {
