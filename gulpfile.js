@@ -71,7 +71,7 @@ gulp.task(
           // the dist folder should be regenerated everything changes are detected inside the chatWidget/source folder
           { route: '/chat/widget', dir: config.paths.chatWidgetDist },
         ],
-        port: 3001,
+        port: 4200,
       },
       function() {
         var url = bs.options.get('urls').get('local');
