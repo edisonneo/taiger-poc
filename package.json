@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "browser-sync": "^2.18.13",
+    "express": "^4.17.1",
     "gulp": "^3.9.1",
     "gulp-chug": "^0.5.1",
     "gulp-clean": "^0.4.0",

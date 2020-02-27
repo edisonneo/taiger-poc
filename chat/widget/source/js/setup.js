@@ -1,7 +1,7 @@
 (function () {
   var env = window.__env || {};
   var bot = env.bot;
-  var serverUrl = env.serverUrl;
+  var serverUrl = 'https://sposgva-dev.taiger.io/iconverse-admin';
   var chatBaseUrl = env.chatBaseUrl;
 
   /**
@@ -12,7 +12,7 @@
    */
   function Utils (config) {
     this.bot = config.bot;
-    this.serverUrl = config.serverUrl;
+    this.serverUrl = 'https://sposgva-dev.taiger.io/iconverse-bot-server/bots/ac884001-9226-41ca-b0c1-9ad796897a96';
     this.chatBaseUrl = config.chatBaseUrl;
   }
 
@@ -118,7 +118,7 @@
     }
 
     var request = new XMLHttpRequest();
-    var url = this.serverUrl + '/bots/' + this.bot + '/last-modified-date?' + Date.now();
+    var url = 'https://sposgva-dev.taiger.io/iconverse-bot-server' + '/bots/' + this.bot + '/last-modified-date?' + Date.now();
 
     request.open('GET', url, true);
     request.onload = function () {
