@@ -174,6 +174,26 @@
         FeedbackModalStateService.set({ isFeedbackShowing: true, trigger: 'menu_dropdown' });
       };
 
+      vm.printChatLog = function () {
+        ChatService.getCurrentConversationId().then(function (cid) {
+          IconverseService.downloadChatLog(cid)
+            .then(function (blob) {
+              var isIE = Boolean(window.navigator.msSaveOrOpenBlob);
+
+              if (isIE) {
+                return window.navigator.msSaveOrOpenBlob(blob, 'chatlog.pdf');
+              }
+
+              var fileUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+              var popupWindow = window.open(fileUrl, '_blank', 'height=600,width=800');
+
+              return setTimeout(function () {
+                popupWindow.print();
+              }, 800);
+            });
+        });
+      };
+
       vm.initFeedbackModal = function (options) {
         var isTriggeredOnClose = options ? options.isTriggeredOnClose : false;
         var isShowExitChatBtn = isTriggeredOnClose;

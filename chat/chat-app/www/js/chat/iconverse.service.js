@@ -24,7 +24,8 @@
       autocompleteSuggestions: server + '/api/suggestions',
       getIntentPredictions: server + '/getIntentPredictions',
       suggestUnansweredPhraseIntent: server + '/unansweredPhrases/suggest',
-      botConfig: server + '/optionalFeatures'
+      botConfig: server + '/optionalFeatures',
+      downloadChatLog: server + '/downloadConversation?cid='
     };
 
     return {
@@ -125,6 +126,16 @@
 
       rateAnswer: function (cid, isPositive) {
         return $http.post(API.rateAnswer, { cid: cid, correct: isPositive });
+      },
+
+      downloadChatLog: function (cid) {
+        return $http({
+          url: API.downloadChatLog + cid,
+          responseType: 'blob',
+          method: 'GET'
+        }).then(function (response) {
+          return response.data;
+        });
       },
 
       uploadFile: function (formData) {
