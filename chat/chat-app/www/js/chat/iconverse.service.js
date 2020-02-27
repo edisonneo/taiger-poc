@@ -3,11 +3,29 @@
 
   angular.module('iconverse').factory('IconverseService', IconverseService);
 
-  IconverseService.$inject = ['$http'];
+  IconverseService.$inject = ['$http', 'EnvConfig', 'AppOptions'];
 
-  function IconverseService ($http) {
-    var serverUrl = '';
-    var botId = '';
+  function IconverseService ($http, EnvConfig, AppOptions) {
+    var MOCK_API = {
+      startSession: 'mocks/session_start',
+      sendMessage: 'mocks/iconverse_api.json'
+    };
+
+    var server = EnvConfig.chatEndpoint;
+    var botId = AppOptions.botId;
+
+    var API = {
+      conversationsSession: server + '/conversations/session/' + botId,
+      startSession: server + '/startSession',
+      sendMessage: server + '/message',
+      saveSurvey: server + '/saveSurvey',
+      rateAnswer: server + '/rateAnswer',
+      uploadFile: server + '/uploadFile',
+      autocompleteSuggestions: server + '/api/suggestions',
+      getIntentPredictions: server + '/getIntentPredictions',
+      suggestUnansweredPhraseIntent: server + '/unansweredPhrases/suggest',
+      botConfig: server + '/optionalFeatures'
+    };
 
     return {
       /**
@@ -27,7 +45,6 @@
         INTENTSEARCH: 'INTENTSEARCH',
         WHATABOUT: 'WHATABOUT',
         CROSSKB: 'CROSSKB',
-        ISEARCH: 'ISEARCH',
         NONE: 'NONE',
         AFTERFEEDBACK: 'AFTERFEEDBACK'
       },
@@ -35,7 +52,7 @@
       getConversationsSession: function () {
         var timestamp = Date.now();
         return $http({
-          url: serverUrl + '/conversations/session/' + botId,
+          url: API.conversationsSession,
           method: 'GET',
 
           // Set to true, to check conversation session using cookies
@@ -51,7 +68,7 @@
 
       startSession: function () {
         return $http({
-          url: serverUrl + '/startSession',
+          url: API.startSession,
           method: 'POST',
           withCredentials: true,
 
@@ -66,10 +83,24 @@
         });
       },
 
+      customSendMessage: function (payload) {
+        return $http({
+          url: API.customSendMessage,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: payload
+        }).then(function (response) {
+          console.log('custom send')
+          return response.data;
+        });
+      },
+
       sendMessage: function (message) {
         console.log('sending', message);
         return $http({
-          url: serverUrl + '/message',
+          url: API.sendMessage,
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -77,7 +108,7 @@
           data: message
         }).then(function (response) {
           // TODO: some post processing here to transform the received message
-          // GOAL - decouple controller&template from the converse server response
+          // GOAL - decouple controller&template from the iconverse server response
           // return response.data[2];
 
           return response.data;
@@ -85,7 +116,7 @@
       },
 
       saveSurvey: function (cid, satisfactionNum, feedbackStr) {
-        return $http.post(serverUrl + '/saveSurvey', {
+        return $http.post(API.saveSurvey, {
           cid: cid,
           satisfaction: satisfactionNum,
           feedback: feedbackStr
@@ -93,22 +124,12 @@
       },
 
       rateAnswer: function (cid, isPositive) {
-        return $http.post(serverUrl + '/rateAnswer', { cid: cid, correct: isPositive });
-      },
-
-      downloadChatLog: function (cid) {
-        return $http({
-          url: serverUrl + '/downloadConversation?cid=' + cid,
-          responseType: 'blob',
-          method: 'GET'
-        }).then(function (response) {
-          return response.data;
-        });
+        return $http.post(API.rateAnswer, { cid: cid, correct: isPositive });
       },
 
       uploadFile: function (formData) {
         return $http({
-          url: serverUrl + '/uploadFile',
+          url: API.uploadFile,
           method: 'POST',
           headers: {
             'Content-Type': undefined
@@ -118,7 +139,7 @@
       },
 
       getIntentPredictions: function (query, cid) {
-        return $http.get(serverUrl + '/getIntentPredictions', {
+        return $http.get(API.getIntentPredictions, {
           params: {
             text: query,
             cid: cid
@@ -127,14 +148,13 @@
       },
 
       getAutocompleteSuggestions: function (message) {
-        return $http.post(serverUrl + '/api/suggestions', message).then(function (response) {
+        return $http.post(API.autocompleteSuggestions, message).then(function (response) {
           return response.data;
         });
       },
 
       triggerSendConversationToEmail: function (cid, emailAddress) {
-        var url = serverUrl + '/conversations/' + cid + '/sendConversationLogToEmail';
-        return $http.post(url, {
+        return $http.post(server + '/conversations/' + cid + '/sendConversationLogToEmail', {
           email: emailAddress
         });
       },
@@ -166,39 +186,13 @@
           cid: cid,
           suggestedIntent: suggestedIntent
         };
-        return $http.post(serverUrl + '/unansweredPhrases/suggest', body).then(function (response) {
+        return $http.post(API.suggestUnansweredPhraseIntent, body).then(function (response) {
           return response.data;
         });
       },
 
       getBotConfig: function () {
-        return $http.get(serverUrl + '/optionalFeatures');
-      },
-
-      setBotId: function (newBotId) {
-        botId = newBotId;
-      },
-
-      setServerUrl: function (newServerUrl) {
-        serverUrl = newServerUrl;
-      },
-
-      mask: function (text) {
-        return $http.get(serverUrl + '/mask', {
-          params: {
-            text: text
-          }
-        });
-      },
-
-      repeatString: function (pattern, count) {
-        if (count < 1) return '';
-        var result = '';
-        while (count > 1) {
-          if (count & 1) result += pattern;
-          count >>= 1, pattern += pattern;
-        }
-        return result + pattern;
+        return $http.get(API.botConfig);
       }
     };
   }

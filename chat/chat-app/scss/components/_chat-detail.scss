@@ -12,6 +12,9 @@
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    &.full-length{
+      -webkit-line-clamp: initial;
+    }
   }
 
   .single-line-height {
@@ -166,6 +169,14 @@ chat-detail-panel{
     z-index: 2;
     bottom: 0;
     padding: 18px 12px 0px;
+    /*
+    *  1. -webkit-transform is needed to fix the conflict of:
+    *     a) -webkit-overflow-scrolling: touch (parent element)
+    *     b) position: fixed (child element)
+    *     This will force the GPU to re-render the element.
+    *     Only use -webkit- for the transform to work with -webkit-overflow-scrolling.
+    */
+    transform: translate3d(0,0,0);
   }
 }
 

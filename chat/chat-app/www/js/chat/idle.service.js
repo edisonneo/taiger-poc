@@ -3,10 +3,10 @@
 
   angular.module('iconverse').factory('IdleService', IdleService);
 
-  IdleService.$inject = ['$rootScope'];
+  IdleService.$inject = ['$window', 'AppOptions', '$rootScope'];
 
-  function IdleService ($rootScope) {
-    var IDLE_DELAY_TIME_MINS = 3;
+  function IdleService ($window, AppOptions, $rootScope) {
+    var IDLE_DELAY_TIME_MINS = AppOptions.idleDelayTimeMins || 3;
     var timer;
 
     var IdleService = {
@@ -35,10 +35,6 @@
       onTimeout: function () {
         IdleService.stopTracking();
         $rootScope.$emit('chatService:idleTimeoutEvent');
-      },
-
-      setIdleDelayTimeMins: function (timeMs) {
-        IDLE_DELAY_TIME_MINS = timeMs;
       }
     };
 

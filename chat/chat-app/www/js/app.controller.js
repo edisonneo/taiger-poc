@@ -14,7 +14,6 @@
       $ionicLoading,
       ChatService,
       AppOptions,
-      EnvConfig,
       IdleService,
       ChatEventEmitterService,
       LivechatService,
@@ -28,7 +27,7 @@
     ) {
       var vm = this;
 
-      vm.appOptions = null;
+      vm.appOptions = AppOptions;
 
       // conversation object to pass into livechat
       vm.conversationId = {};
@@ -37,9 +36,9 @@
       vm.isLivechatLoading = false;
       vm.isLangSelectOpen = false;
       vm.isMenuSelectOpen = false;
-      vm.languages = null;
-      vm.selectedLanguage = null;
-      vm.isShowLandingPage = null;
+      vm.languages = AppOptions.languages;
+      vm.selectedLanguage = vm.languages[0];
+      vm.isShowLandingPage = AppOptions.isLandingPage;
       vm.isDetailView = false;
       vm.detailViewTitle = '';
       vm.feedbackModal = null;
@@ -47,7 +46,10 @@
       var DISPLAY_OPTS = { DETAIL_PANEL_LAYOUT: 'detail_panel_layout' };
       var historyStates = [];
 
+      window.customData = {};
+
       window.addEventListener('message', function (e) {
+
         if (e.data === 'ATTEMPT_TO_CLOSE_CHAT') {
           FeedbackModalStateService.set({ trigger: 'chat_close_button' });
           // Handle the condition where user
@@ -72,7 +74,14 @@
             vm.closeChat();
           }
         }
+
+        if(e.data.type === 'CONTEXT_INPUT'){
+          console.log('context input!!!')
+          window.customData.contextInput = e.data.text;
+        }
       });
+
+
 
       vm.removeFeedBackModal = function () {
         if (vm.feedbackModal) vm.feedbackModal.remove();
@@ -83,7 +92,7 @@
         vm.isShowLandingPage = false;
       };
 
-      vm.sanitizedCustomHtml = null;
+      vm.sanitizedCustomHtml = $sce.trustAsHtml(AppOptions.customLandingPageHtml);
 
       vm.selectLanguage = function (language) {
         // Exit if selected language is the same
@@ -165,26 +174,6 @@
         FeedbackModalStateService.set({ isFeedbackShowing: true, trigger: 'menu_dropdown' });
       };
 
-      vm.printChatLog = function () {
-        ChatService.getCurrentConversationId().then(function (cid) {
-          IconverseService.downloadChatLog(cid)
-            .then(function (blob) {
-              var isIE = Boolean(window.navigator.msSaveOrOpenBlob);
-
-              if (isIE) {
-                return window.navigator.msSaveOrOpenBlob(blob, 'chatlog.pdf');
-              }
-
-              var fileUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
-              var popupWindow = window.open(fileUrl, '_blank', 'height=600,width=800');
-
-              return setTimeout(function () {
-                popupWindow.print();
-              }, 800);
-            });
-        });
-      };
-
       vm.initFeedbackModal = function (options) {
         var isTriggeredOnClose = options ? options.isTriggeredOnClose : false;
         var isShowExitChatBtn = isTriggeredOnClose;
@@ -247,13 +236,10 @@
           var data = ChatService.getMessageTypeAndContent(msg);
 
           if (data.type === 'LINKS') {
-            vm.detailViewTitle = 'List of intents';
-          }
-          else if (data.type === 'ISEARCH_RESULTS') {
-            vm.detailViewTitle = 'List of Websites';
+            vm.detailViewTitle = 'Select an Option';
           }
           else if (data.type === 'DETAILS') {
-            vm.detailViewTitle = 'Select an option';
+            vm.detailViewTitle = 'Select an Option';
 
             // Load single view of element if an ID is detected
             if ($state.params.elementId) {
@@ -276,7 +262,7 @@
           return $state.$current.name;
         },
         function (newVal, oldVal) {
-          var detailViews = ['app.chat-option-detail', 'app.chat-detail', 'app.chat-web-fallback'];
+          var detailViews = ['app.chat-option-detail', 'app.chat-detail'];
           vm.isDetailView = detailViews.indexOf(newVal) > -1;
 
           // Load detail view title if it is detail view
@@ -320,75 +306,76 @@
         );
       });
 
-      vm.showSendConversationPopup = function () {
-        $scope.sendConvoData = {};
-        var termsClause = vm.appOptions.conversationEmailTermsText;
-        var sendConvoPopup = $ionicPopup.show({
-          template:
-            '<div class="text-center"><input autofocus type="text" class="email-input" ng-model="sendConvoData.email"/> <div class="mt-10"><label class="text-sm"><input type="checkbox" ng-model="sendConvoData.acceptedTerms"/>&nbsp;&nbsp;'
-            + termsClause
-            + '</label></div></div>',
-          title: 'Email Conversation Log',
-          subTitle: 'What email should we send the conversation to?',
-          scope: $scope,
-          buttons: [
-            { text: 'Cancel' },
-            {
-              text: '<b>Send</b>',
-              type: 'button-positive',
-              onTap: function (e) {
-                if (!$scope.sendConvoData.email || !$scope.sendConvoData.acceptedTerms) {
-                  // don't allow the user to send unless all fields properly entered
-                  e.preventDefault();
+      // vm.showSendConversationPopup = function () {
+      //   console.log('show send convo')
+      //   $scope.sendConvoData = {};
+      //   var termsClause = vm.appOptions.conversationEmailTermsText;
+      //   var sendConvoPopup = $ionicPopup.show({
+      //     template:
+      //       '<div class="text-center"><input autofocus type="text" class="email-input" ng-model="sendConvoData.email"/> <div class="mt-10"><label class="text-sm"><input type="checkbox" ng-model="sendConvoData.acceptedTerms"/>&nbsp;&nbsp;'
+      //       + termsClause
+      //       + '</label></div></div>',
+      //     title: 'Email Conversation Log',
+      //     subTitle: 'What email should we send the conversation to?',
+      //     scope: $scope,
+      //     buttons: [
+      //       { text: 'Cancel' },
+      //       {
+      //         text: '<b>Send</b>',
+      //         type: 'button-positive',
+      //         onTap: function (e) {
+      //           if (!$scope.sendConvoData.email || !$scope.sendConvoData.acceptedTerms) {
+      //             // don't allow the user to send unless all fields properly entered
+      //             e.preventDefault();
 
-                  if (!$scope.sendConvoData.email) {
-                    vm.showToast('Please enter your email', 2000);
-                  }
-                  else if (!$scope.sendConvoData.acceptedTerms) {
-                    vm.showToast('Please accept the terms', 2000);
-                  }
-                  return false;
-                }
+      //             if (!$scope.sendConvoData.email) {
+      //               vm.showToast('Please enter your email', 2000);
+      //             }
+      //             else if (!$scope.sendConvoData.acceptedTerms) {
+      //               vm.showToast('Please accept the terms', 2000);
+      //             }
+      //             return false;
+      //           }
 
-                // validate email pattern
-                var isValidEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(
-                  $scope.sendConvoData.email
-                );
-                if (!isValidEmail) {
-                  vm.showToast('Please enter a valid email', 2000);
-                  e.preventDefault();
-                  return false;
-                }
+      //           // validate email pattern
+      //           var isValidEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(
+      //             $scope.sendConvoData.email
+      //           );
+      //           if (!isValidEmail) {
+      //             vm.showToast('Please enter a valid email', 2000);
+      //             e.preventDefault();
+      //             return false;
+      //           }
 
-                // if validation pass, return the email string
-                return $scope.sendConvoData.email;
-              }
-            }
-          ]
-        });
+      //           // if validation pass, return the email string
+      //           return $scope.sendConvoData.email;
+      //         }
+      //       }
+      //     ]
+      //   });
 
-        sendConvoPopup.then(function (email) {
-          if (email) {
-            vm.showLoader(false, 'Sending...');
-            var failMessage = 'Sorry, we could not send the email.<br>Please try again later.';
-            // retrieve cid
-            ChatService.getCurrentConversationId()
-              .then(function (cid) {
-                // hit the API to trigger the email
-                IconverseService.triggerSendConversationToEmail(cid, email)
-                  .then(function () {
-                    vm.showSuccessToast('Email Sent!', 2000);
-                  })
-                  .catch(function () {
-                    vm.showErrorToast(failMessage, 2000);
-                  });
-              })
-              .catch(function () {
-                vm.showErrorToast(failMessage, 2000);
-              });
-          }
-        });
-      };
+        // sendConvoPopup.then(function (email) {
+        //   if (email) {
+        //     vm.showLoader(false, 'Sending...');
+        //     var failMessage = 'Sorry, we could not send the email.<br>Please try again later.';
+        //     // retrieve cid
+        //     ChatService.getCurrentConversationId()
+        //       .then(function (cid) {
+        //         // hit the API to trigger the email
+        //         IconverseService.triggerSendConversationToEmail(cid, email)
+        //           .then(function () {
+        //             vm.showSuccessToast('Email Sent!', 2000);
+        //           })
+        //           .catch(function () {
+        //             vm.showErrorToast(failMessage, 2000);
+        //           });
+        //       })
+        //       .catch(function () {
+        //         vm.showErrorToast(failMessage, 2000);
+        //       });
+        //   }
+        // });
+      // };
 
       vm.showConfirmAlert = function (title, text, onConfirmFn, onCancelFn, okText, cancelText) {
         $scope.confirmAlertPopup = $ionicPopup.confirm({
@@ -478,6 +465,17 @@
       });
 
       /**
+       * Receive Events From Parent Window
+       * - `OPEN_EVENT` - triggered when user clicks on chat toggle button to open chatbox
+       */
+      // $window.addEventListener('message', function (e) {
+      //   var msg = e.data;
+      //   if (msg === 'OPEN_EVENT') {
+      //     ChatService.handleChatBoxOpened();
+      //   }
+      // });
+
+      /**
        * On livechat after successfully loaded
        */
       $rootScope.$on('livechat:onAfterLoad', function () {
@@ -509,10 +507,6 @@
         return IconverseService.getChannelType() === 'mobile-web';
       };
 
-      vm.checkIsWebView = function () {
-        return window.location.search.indexOf('fromWebView=true') !== -1;
-      };
-
       $rootScope.$on('onTriggerLiveChat', function () {
         vm.openLivechatBtnOnClicked();
       });
@@ -520,32 +514,35 @@
       /**
        * Open chat window of Livechat
        */
-      vm.openLivechatBtnOnClicked = function () {
-        // get all conversation log
-        var conversationLog = ChatService.getConversationLog() || [];
-        // transform the conversation log into {name,value}
-        var transformedConversationLog = vm.getTransformedConversationLog(conversationLog);
-        // check is livechat loaded
-        var isLivechatLoaded = LivechatService.isLivechatLoaded();
-        if (isLivechatLoaded) {
-          // setup custom variable for livechat
-          var newCustomVariable = transformedConversationLog.concat([vm.conversationId]);
-          IdleService.stopTracking();
-          LivechatService.setCustomVariables(newCustomVariable);
-          LivechatService.openChatWindow();
-        }
-        else {
-          vm.isLivechatLoading = true;
-          ChatService.getCurrentConversationId().then(function (cid) {
-            vm.conversationId = { name: 'conversationId', value: cid };
-            // setup params for livechat
-            var newParams = transformedConversationLog.concat([vm.conversationId]);
-            IdleService.stopTracking();
-            LivechatService.setParams(newParams);
-            LivechatService.loadLivechat(vm.appOptions.livechatLicense);
-          });
-        }
-      };
+      // vm.openLivechatBtnOnClicked = function () {
+      //   if (vm.isLivechatLoading) {
+      //     return false;
+      //   }
+      //   // get all conversation log
+      //   var conversationLog = ChatService.getConversationLog() || [];
+      //   // transform the conversation log into {name,value}
+      //   var transformedConversationLog = vm.getTransformedConversationLog(conversationLog);
+      //   // check is livechat loaded
+      //   var isLivechatLoaded = LivechatService.isLivechatLoaded();
+      //   if (isLivechatLoaded) {
+      //     // setup custom variable for livechat
+      //     var newCustomVariable = transformedConversationLog.concat([vm.conversationId]);
+      //     IdleService.stopTracking();
+      //     LivechatService.setCustomVariables(newCustomVariable);
+      //     LivechatService.openChatWindow();
+      //   }
+      //   else {
+      //     vm.isLivechatLoading = true;
+      //     ChatService.getCurrentConversationId().then(function (cid) {
+      //       vm.conversationId = { name: 'conversationId', value: cid };
+      //       // setup params for livechat
+      //       var newParams = transformedConversationLog.concat([vm.conversationId]);
+      //       IdleService.stopTracking();
+      //       LivechatService.setParams(newParams);
+      //       LivechatService.loadLivechat(vm.appOptions.livechatLicense);
+      //     });
+      //   }
+      // };
 
       /**
        * Take the last 10 element from array,
@@ -600,67 +597,44 @@
         IdleService.startTracking();
       });
 
-      var isVoiceRecognitionSwitchedOn = function (options) {
-        return options.isVoiceRecognitionAvailable
-          && options.voiceRecognitionEndpoint
-          && options.voiceRecognitionEndpoint;
+      var merge = function (defaultObj, overideObj) {
+        var result = {};
+        for (var key in defaultObj) result[key] = defaultObj[key];
+        for (var key in overideObj) if (angular.isDefined(overideObj[key]) && overideObj[key] !== '') result[key] = overideObj[key];
+        return result;
       };
 
-      var setupVoiceRecognitionService = function (options) {
-        // Set up voice recognition service
-        AudioStreamingService.getUserMediaAccess().then(function () {
-          $rootScope.$broadcast('voiceRecognition:hasAcess');
-          VoiceRecognitionService.setupServerPath(options.voiceRecognitionEndpoint);
-          VoiceRecognitionService.setupWebsocketPath(options.voiceRecognitionWebSocket);
-          AudioStreamingService.setupWebsocketPath();
-        });
-      };
-
-      var loadBotConfig = function () {
-        IconverseService.getBotConfig()
-          .then(function (response) {
-            var botConfig = response.data.data;
-            AppOptions.merge(botConfig);
-            $rootScope.$broadcast('appOptions:updated');
-          })
-          .catch(function () {
-            $rootScope.$broadcast('appOptions:updated');
-          });
-      };
-
-      $rootScope.$on('app:loaded', function (e) {
-        AppOptions.merge(window.__appOptions);
-        EnvConfig.merge(window.__envConfig);
-        IconverseService.setServerUrl(EnvConfig.get().chatEndpoint);
-        loadBotConfig();
-      });
-
-      $rootScope.$on('appOptions:updated', function () {
-        vm.appOptions = AppOptions.get();
-
+      var setupBotWithConfig = function (options) {
         // Set up livechat function
-        vm.isLivechatAvailable = !!vm.appOptions.livechatLicense;
+        vm.isLivechatAvailable = !!options.livechatLicense;
 
         // Set up language selector
-        vm.languages = vm.appOptions.languages;
+        vm.languages = options.languages;
         vm.selectedLanguage = vm.languages[0];
-        ChatService.setLanguage(vm.selectedLanguage);
-        AudioStreamingService.setLangCode(vm.selectedLanguage);
-        TextToSpeechService.setVoice(vm.selectedLanguage);
 
-        // Set up landing page
-        vm.isShowLandingPage = vm.appOptions.isLandingPage;
-        vm.sanitizedCustomHtml = $sce.trustAsHtml(vm.appOptions.customLandingPageHtml);
-
-        IconverseService.setBotId(vm.appOptions.botId);
-        IdleService.setIdleDelayTimeMins(vm.appOptions.idleDelayTimeMins);
-        ChatService.setFirstMsgTypingTimeMs(vm.appOptions.firstMessageTypingDelayMs);
-        ChatService.setMaxTypingTimeMs(vm.appOptions.typingDelayMs);
-        ChatService.setBot(vm.appOptions.botId);
-
-        if (isVoiceRecognitionSwitchedOn(vm.appOptions)) {
-          setupVoiceRecognitionService(vm.appOptions);
+        // Set up voice recognition service
+        if (
+          options.isVoiceRecognitionAvailable
+          && options.voiceRecognitionEndpoint
+          && options.voiceRecognitionEndpoint
+        ) {
+          AudioStreamingService.getUserMediaAccess().then(function () {
+            $rootScope.$broadcast('voiceRecognition:hasAcess');
+            VoiceRecognitionService.setupServerPath(options.voiceRecognitionEndpoint);
+            VoiceRecognitionService.setupWebsocketPath(options.voiceRecognitionWebSocket);
+            AudioStreamingService.setupWebsocketPath();
+          });
         }
-      });
+      };
+
+      // var loadBotConfig = function () {
+      //   IconverseService.getBotConfig().then(function (response) {
+      //     var botConfig = response.data.data;
+      //     vm.appOptions = merge(AppOptions, botConfig);
+      //     setupBotWithConfig(vm.appOptions);
+      //   });
+      // };
+
+      // loadBotConfig();
     });
 }());

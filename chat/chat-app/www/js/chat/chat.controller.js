@@ -28,11 +28,10 @@ angular
     vm.fileUploadBarUploadingText = 'Uploading...';
     vm.fileUploadBarProcessingUploadText = '';
     vm.isAutocompleteVisible = false;
-    vm.queryMinLength = null;
-    vm.feedbackMessage = null;
-    vm.afterFeedbackMessage = null;
+    vm.queryMinLength = AppOptions.autocompleteQueryMinLength;
+    vm.feedbackMessage = AppOptions.feedbackMessage;
+    vm.afterFeedbackMessage = AppOptions.afterFeedbackMessage;
     vm.isExpectTypeInput = null;
-    vm.isDropdownExpectInput = null;
     vm.dateInputLimits = {};
     vm.suggestions = [];
     vm.isInitialisingConversation = false;
@@ -41,8 +40,8 @@ angular
     vm.autocompleteTextInput = '';
 
     // set the default input placeholder (this depending on the expected input type)
-    var DEFAULT_INPUT_PLACEHOLDER = null;
-    vm.userInputPlaceholder = null;
+    var DEFAULT_INPUT_PLACEHOLDER = AppOptions.inputPlaceholder;
+    vm.userInputPlaceholder = DEFAULT_INPUT_PLACEHOLDER;
 
     vm.isVoiceRecognitionAvailable = false;
 
@@ -50,10 +49,10 @@ angular
     vm.isLanguageSelectionMenuOpened = false;
     vm.isRecording = false;
     vm.isVoiceDetected = false;
-    vm.getConversationsSessionPromise = null;
 
     var version = '1.3.1';
-    console.info('converse-ui version: ' + version);
+
+    console.info('iconverse-ui version: ' + version);
 
     // disable draggable content on ionic, so as not to interfere with copy and pasting of text
     $ionicSideMenuDelegate.canDragContent(false);
@@ -63,23 +62,6 @@ angular
     // note: conversation is maintained in ChatService so its state can be shared across controllers
     ChatService.bindConversation(vm, 'conversation');
 
-    /**
-     * Receive Events From Parent Window
-     * - `OPEN_EVENT` - triggered when user clicks on chat toggle button to open chatbox
-     */
-    $window.addEventListener('message', function (e) {
-      var msg = e.data;
-      if (msg === 'OPEN_EVENT') {
-        /**
-         * Only initialise conversation if:
-         * 1. The chat have not initialise (no cid)
-         * 2. The chat is not under initialisation state (by checking getConversationsSessionPromise)
-         */
-        if (!vm.cid && !this.getConversationsSessionPromise) {
-          vm.initialiseConversation();
-        }
-      }
-    });
 
     vm.initialiseConversation = function () {
       vm.isInitialisingConversation = true;
@@ -93,7 +75,7 @@ angular
         }, 0);
       };
 
-      this.getConversationsSessionPromise = IconverseService.getConversationsSession()
+      IconverseService.getConversationsSession()
         .then(function (data) {
           if (data && data.activeSession && data.messages && data.messages.length) {
             ChatService.restoreConversationMessages(data.messages);
@@ -110,6 +92,7 @@ angular
             }, 100);
           }
           else {
+            console.log("WELCOME")
             // if there is no conversation, let's welcome the user
             var isSeenUser = angular.isDefined(ChatService.getLastConversationRecord());
             ChatService.startConversation(isSeenUser)
@@ -129,15 +112,7 @@ angular
         });
     };
 
-    $rootScope.$on('appOptions:updated', function () {
-      var appOptions = AppOptions.get();
-
-      vm.queryMinLength = appOptions.autocompleteQueryMinLength;
-      vm.feedbackMessage = appOptions.feedbackMessage;
-      vm.afterFeedbackMessage = appOptions.afterFeedbackMessage;
-      DEFAULT_INPUT_PLACEHOLDER = appOptions.inputPlaceholder;
-      vm.userInputPlaceholder = DEFAULT_INPUT_PLACEHOLDER;
-    });
+    vm.initialiseConversation();
 
     $rootScope.$on('voiceRecognition:hasAcess', function () {
       vm.isVoiceRecognitionAvailable = true;
@@ -250,31 +225,7 @@ angular
       }
     });
 
-    vm.handleDropdownSelected = function (option) {
-      vm.isProcessing = true;
-
-      ChatService.processUserMessage(option.text, 'dropdownOption' + option.value)
-        .then(vm.handleServerReplyMsg)
-        .catch(ChatService.getGenericErrorHandler())
-        .finally(function () {
-          vm.isProcessing = false;
-        });
-    };
-
     vm.handleServerReplyMsg = function (msg) {
-      // handle dropdown input expected
-      if (msg.options) {
-        $timeout(function () {
-          vm.isDropdownExpectInput = 'dropdown';
-          vm.userInputPlaceholder = 'Select from dropdown options';
-        });
-      }
-      else {
-        $timeout(function () {
-          vm.isDropdownExpectInput = null;
-        });
-      }
-
       $timeout(function () {
         $rootScope.$broadcast('scrollChatToBottom', { serverTrigger: true });
       });
@@ -315,7 +266,11 @@ angular
     };
 
     vm.handleInputBlur = function () {
-      vm.isAutocompleteVisible = false;
+      // Set a timeout to close autocomplete-suggestions because the blur of the input
+      // coincides with the clicking of autocomplete-suggestions
+      $timeout(function () {
+        vm.isAutocompleteVisible = false;
+      }, 500);
       vm.isRecording = false;
     };
 
@@ -337,6 +292,7 @@ angular
 
     // process the user entered message
     vm.processEntry = function () {
+      console.log('priocess enrtru')
       // Prevent default processing if there is nothing typed
       // Or if there is an active suggestion highlighted by autocomplete
       if (!vm.entry) return;
@@ -587,7 +543,7 @@ angular
       IconverseService.suggestUnansweredPhraseIntent(
         message.bot,
         message.cid,
-        message.intent
+        message.enquiry
       ).catch(function (err) {});
     };
 
@@ -613,33 +569,38 @@ angular
       ).catch(function (err) {});
     };
 
-    // Detect if the current chat bubble is the most recent one.
-    // Used for disabling actions in previous bubbles.
-    vm.isCurrentActiveBubble = function (msg) {
-      return vm.conversation[vm.conversation.length - 1] === msg;
+    vm.isActiveExternalUrlBtn = function (msg) {
+      if (vm.conversation[vm.conversation.length - 1] === msg && msg.links) {
+        return msg.links[0].action === 'externalurl';
+      }
+      return false;
     };
 
+    vm.isActiveMsg = function (msg) {
+      var mostRecentMessage = vm.conversation[vm.conversation.length - 1];
+      return mostRecentMessage.id === msg.id;
+    };
 
     // This function is called onkeyup event in the search input.
     // This is throttled to prevent too many api calls
-    // $scope.searchAutocomplete = _.throttle(function() {
-    //         vm.isSearching = true;
-    //         // Prevent the search from being triggered in the input is empty
-    //         if(vm.autocompleteEntry === ''){
-    //             vm.isSearching = false;
-    //             return;
-    //         }
+    $scope.searchAutocomplete = _.throttle(function() {
+            vm.isSearching = true;
+            // Prevent the search from being triggered in the input is empty
+            if(vm.autocompleteEntry === ''){
+                vm.isSearching = false;
+                return;
+            }
 
-    //         // Get enquiries matching the search input
-    //         IconverseService.getEnquiriesMatchingText(vm.autocompleteEntry).then(function(response){
-    //             // Display the search results
-    //             vm.autocompleteSearchResults = response.data;
+            // Get enquiries matching the search input
+            IconverseService.getEnquiriesMatchingText(vm.autocompleteEntry).then(function(response){
+                // Display the search results
+                vm.autocompleteSearchResults = response.data;
 
-    //             // If there are no results turn off searching status
-    //             if(vm.autocompleteSearchResults.length <= 0){
-    //                 vm.isSearching = false;
-    //             }
-    //         });
+                // If there are no results turn off searching status
+                if(vm.autocompleteSearchResults.length <= 0){
+                    vm.isSearching = false;
+                }
+            });
 
-    // }, 800);
+    }, 800);
   });

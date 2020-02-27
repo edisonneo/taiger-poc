@@ -9,7 +9,10 @@
     '$window',
     '$state',
     '$timeout',
+    '$ionicScrollDelegate',
+    '$http',
     'ChatEventEmitterService',
+    'AppOptions',
     'IdleService',
     '$rootScope'
   ];
@@ -20,15 +23,17 @@
     $window,
     $state,
     $timeout,
+    $ionicScrollDelegate,
+    $http,
     ChatEventEmitterService,
+    AppOptions,
     IdleService,
     $rootScope
   ) {
     var ICONVERSE_CONFUSED_REPLY_TEXT = "I don't understand";
 
     var _cid = null;
-    var _lang;
-    var bot;
+    var _lang = AppOptions.languages[0];
 
     // the message which was last selected for viewing details in chat-detail
     var _latestSelectedMessage = null;
@@ -50,8 +55,8 @@
 
     var CURRENT_STATUS = STATUSES.IDLE;
 
-    var MAX_TYPING_TIME_MS = 200;
-    var FIRST_MSG_TYPING_TIME_MS = 400;
+    var MAX_TYPING_TIME_MS = AppOptions.typingDelayMs || 200;
+    var FIRST_MSG_TYPING_TIME_MS = AppOptions.firstMessageTypingDelayMs || 400;
 
     var STORAGE_KEYS = {
       LAST_CONVO: 'ic',
@@ -91,17 +96,14 @@
         query,
         topic,
         subtopic,
-        intent,
+        enquiry,
         lang,
         mode,
         isAutoTriggered,
-        messageType,
-        maskedData
+        messageType
       ) {
         var msg = this.setupMessage(text, cid);
         msg.channel = IconverseService.getChannelType();
-
-        msg.maskedData = maskedData;
 
         msg.source = 'user';
         if (choice) {
@@ -118,14 +120,14 @@
           msg.subtopic = subtopic;
         }
 
-        if (intent) {
-          msg.intent = intent;
+        if (enquiry) {
+          msg.enquiry = enquiry;
         }
 
         // If mode is not provided, the default to 'text'
         msg.mode = mode || 'text';
 
-        msg.bot = bot;
+        msg.bot = AppOptions.botId;
 
         msg.isAutoTriggered = isAutoTriggered;
 
@@ -185,6 +187,7 @@
       restartConversation: function () {
         console.log('restarting convo...');
         _cid = null;
+        $state.go('app.chat');
         // clear conversation
         this.clearConversation();
         // start convo
@@ -264,6 +267,7 @@
       // a new session is started and the newly created CID returned.
       // internally also sets the current CID
       getCurrentConversationId: function () {
+        console.log('get current conversation')
         var deferred = $q.defer();
         if (_cid) {
           deferred.resolve(_cid);
@@ -277,7 +281,7 @@
 
               if (!_cid) {
                 deferred.reject(
-                  'Converse Server returned null cid. Could not start converse session!'
+                  'iConverse Server returned null cid. Could not start iconverse session!'
                 );
               }
               else {
@@ -287,7 +291,7 @@
               }
             })
             .catch(function (err) {
-              deferred.reject('Error starting Converse Session: ' + JSON.stringify(err));
+              deferred.reject('Error starting iConverse Session: ' + JSON.stringify(err));
             });
         }
 
@@ -337,6 +341,35 @@
           return false;
         }
       },
+      processCustomMessage: function (textEntry) {
+        var deferred = $q.defer();
+        var self = this;
+
+        this.addUserMessage(textEntry);
+        var payload =
+        {
+          "context": window.customData.contextInput,
+          "questions": [
+            textEntry
+          ]
+        }
+
+        self.addProcessingMessage();
+
+        IconverseService.customSendMessage(payload)
+          .then(function(response){
+            self.removeProcessingMessage().then(function(){
+              var message = {
+                text: response.questions[0].answer
+              }
+              // ChatEventEmitterService.onMessageReceived(message);
+              _conversationLog.push(message);
+            })
+          })
+
+
+        return deferred.promise;
+      },
 
       processUserMessage: function (
         text,
@@ -346,11 +379,12 @@
         isAutoTriggered,
         topic,
         subtopic,
-        intent,
+        enquiry,
         lang,
         mode,
         messageType
       ) {
+        console.log('process user message')
         var self = this;
         var deferred = $q.defer();
 
@@ -365,15 +399,7 @@
         // record the convo
         this.saveConversation(_cid);
 
-        var isMaskingRequired = false;
-        if(_conversationLog[_conversationLog.length - 1]) {
-          isMaskingRequired = _conversationLog[_conversationLog.length - 1].maskedData === true;
-        }
-
-        if (!isAutoTriggered && isMaskingRequired) {
-          this.addUserMessage(this.applyMask(text));
-        }
-        else if (!isAutoTriggered) {
+        if (!isAutoTriggered) {
           this.addUserMessage(text); // push user message into log
         }
 
@@ -391,12 +417,11 @@
               query,
               topic,
               subtopic,
-              intent,
+              enquiry,
               lang,
               mode,
               isAutoTriggered,
-              messageType,
-              isMaskingRequired
+              messageType
             );
 
             if (!isAutoTriggered) {
@@ -414,7 +439,7 @@
             return IconverseService.sendMessage(msg);
           })
           .then(function (replyMsg) {
-            // this case occurs if the backend doesn't have a intent that handles RATE_MESSAGES
+            // this case occurs if the backend doesn't have a enquiry that handles RATE_MESSAGES
             if (
               topic === IconverseService.RATE_MESSAGE.TOPIC
               && replyMsg.text === IconverseService.RATE_MESSAGE.INVALID_TEXT
@@ -622,10 +647,6 @@
 
       getMessageTypeAndContent: function (message) {
         var content;
-        if (this.isISearchResult(message)) {
-          content = message.payload.elements; // is an array of detailed content
-          return { type: 'ISEARCH_RESULTS', content: content };
-        }
         if (this.isMessageWithDetailedContent(message)) {
           content = message.payload.elements; // is an array of detailed content
           return { type: 'DETAILS', content: content };
@@ -634,10 +655,6 @@
           content = message.links; // is a list of links
           return { type: 'LINKS', content: content };
         }
-      },
-
-      isISearchResult: function (message) {
-        return angular.isObject(message.payload) && message.payload.size > 0 && message.payload.type === 'iSearchResult';
       },
 
       getDateInputLimitsFromMessage: function (message) {
@@ -710,47 +727,7 @@
         }
         _cid = messages[messages.length - 1].cid;
         CURRENT_STATUS = STATUSES.IDLE;
-      },
-
-      setFirstMsgTypingTimeMs: function (newFirstMsgTypingTimeMs) {
-        FIRST_MSG_TYPING_TIME_MS = newFirstMsgTypingTimeMs;
-      },
-
-      setMaxTypingTimeMs: function (newMaxTypingTimeMs) {
-        MAX_TYPING_TIME_MS = newMaxTypingTimeMs;
-      },
-
-      setBot: function (newBot) {
-        bot = newBot;
-      },
-
-      applyMask: function (text) {
-        var result = '';
-        angular.forEach(text.split(' '), function (value, key) {
-          if(value.trim()) {
-            var frontCharDisplayIdx = 1;
-            var lastCharDisplayIdx = 3;
-
-            if(value.length == 1) {
-              frontCharDisplayIdx = 0;
-              lastCharDisplayIdx = 0;
-            } else if(value.length == 2) {
-              lastCharDisplayIdx = 0;
-            } else if (value.length == 3) {
-              lastCharDisplayIdx = 1;
-            } else if (value.length == 4) {
-              lastCharDisplayIdx = 2;
-            }
-            var maskedText = value.replace(new RegExp('([a-zA-Z0-9]{'+frontCharDisplayIdx+'})([a-zA-Z0-9]+)([a-zA-Z0-9]{'+lastCharDisplayIdx+'})', 'gi'), function(match, start, middle, end) {
-              return start + IconverseService.repeatString('*', middle.length) + end;
-            });
-            result = result.concat(maskedText) + ' ';
-          }
-        });
-        return result;
       }
-
-
     };
   }
 }());

@@ -7,6 +7,8 @@
 
   function ChatEventEmitterService () {
     var formatEmitData = function (msg) {
+      console.log('from format');
+      console.log(msg)
       var obj = {
         type: 'iconverse-event',
         cid: msg.cid,

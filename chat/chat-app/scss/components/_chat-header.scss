@@ -1,15 +1,15 @@
 .bar.bar-brand {
-  background: $color-primary;
+  background-color: $color-primary;
   color: $color-white;
-  display: -ms-flexbox;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: center;
   -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  transition: 0.3s;
   padding: 0;
   border: none;
-
 
   // This is use to override default style
   > .button + .button:last-child {

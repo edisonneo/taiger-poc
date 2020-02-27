@@ -5,7 +5,7 @@
  */
 
 #iconverse-chat-btn {
-    position: fixed;
+  position: fixed;
 	right: 15px;
 	bottom: 15px;
 	height: 46.4px;
@@ -15,13 +15,13 @@
 	outline: none;
 	cursor: pointer;
 
+	background-color: rgb(68, 68, 68);
 	background-image: url("../img/chat-bubble-white.png");
-	background-color: #4a90e2;
-    background-size: 22px 22px;
-    background-position: center center;
-    background-repeat: no-repeat;
+	background-size: 22px 22px;
+	background-position: center center;
+	background-repeat: no-repeat;
 
-    -webkit-transition: background 0.15s linear;
+	-webkit-transition: background 0.15s linear;
 	-moz-transition: background 0.15s linear;
 	-o-transition: background 0.15s linear;
 	-ms-transition: background 0.15s linear;
@@ -82,9 +82,6 @@
 	height: 100%;
 	width: 100%;
 
-	/* Magic number, must be lower than iconverse-chat-holder border-radius to prevent jumping border */
-	border-radius: 10px;
-
 	-webkit-transition: opacity 0.35s linear;
 	-moz-transition: opacity 0.35s linear;
 	-o-transition: opacity 0.35s linear;
@@ -111,8 +108,7 @@
 #iconverse-chat-holder.mobile-sizing #iconverse-chat-iframe {
 	/* height: 100vh; */
 	height: 100%;
-		width: 100vw;
-		border-radius: 0;
+    width: 100vw;
 }
 
 #iconverse-chat-iframe.invisible {

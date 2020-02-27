@@ -53,10 +53,9 @@
   align-items: center;
 }
 
-.slide-img {
-  width: 165px;
+.swiper__img-container{
+  width: 100%;
 }
-
 
 /*
  *  1. -webkit-transform is needed to fix the conflict of:

@@ -105,10 +105,10 @@
         vm.content = data.content;
 
         if (vm.type === 'LINKS') {
-          vm.title = 'List of intents';
+          vm.title = 'Select an Option';
         }
         else if (vm.type === 'DETAILS') {
-          vm.title = 'Select an option';
+          vm.title = 'Select an Option';
 
           vm.content = _.map(data.content, function (element) {
             return transformContent(element, msg);

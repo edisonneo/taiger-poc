@@ -1,5 +1,6 @@
 (function (window) {
   window.__envConfig = {
-    chatEndpoint: '/iconverse-converse'
+    chatEndpoint: '/iconverse-converse',
+    chatBaseUrl: '/ui'
   };
 }(this));

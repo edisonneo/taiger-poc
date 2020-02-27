@@ -1,0 +1,25 @@
+{
+  "name": "iconverse-chat-ui",
+  "private": "true",
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.3.2",
+    "lodash": "^4.17.4"
+  },
+  "dependencies": {
+    "ngCordova": "0.1.27-alpha",
+    "ngmap": "1.17.8",
+    "components-font-awesome": "4.7.0",
+    "angular-input-stars-directive": "angular-input-stars#^1.7.1",
+    "angular-scroll-glue": "2.2.0",
+    "ionic-datepicker": "^1.2.1",
+    "moment": "2.22.2",
+    "angular": "1.5.3",
+    "angular-ui-router": "0.2.13",
+    "lodash": "4.17.4",
+    "ionic": "driftyco/ionic-bower#^1.3.5",
+    "angular-tooltips": "^1.2.2"
+  },
+  "resolutions": {
+    "ionic": "1.3.2"
+  }
+}

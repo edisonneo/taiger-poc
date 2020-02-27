@@ -1,43 +1,25 @@
 (function () {
   'use strict';
 
-  // helper fn to merge objects
-  var merge = function (defaultObj, overideObj) {
-    var result = {};
-    for (var key in defaultObj) result[key] = defaultObj[key];
-    for (var key in overideObj) {
-      if (angular.isDefined(overideObj[key]) && overideObj[key] !== '') {
-        result[key] = overideObj[key];
-      }
-    }
-    return result;
-  };
-
   /**
    * APPLICATION DEFAULTS
    */
   var config = {
     envConfig: {
-      // Example: http://localhost:8080/iconverse-converse
-      chatEndpoint: 'https://example.com',
-
-      merge: function (overideObj) {
-        config.envConfig = merge(config.envConfig, overideObj);
-      },
-
-      get: function () {
-        return config.envConfig;
-      }
+      chatEndpoint: 'https://sposgva-dev.taiger.io/iconverse-converse'
     },
     appOptions: {
-      botId: '',
+      botId: "ac884001-9226-41ca-b0c1-9ad796897a96",
       firstMessageTypingDelayMs: 400,
       typingDelayMs: 200,
-      appName: '',
+      appName: 'iConverse',
+      feedbackAppName: false, // Alternative name for the chatbot in the feeback panel (String/false)
       inputPlaceholder: 'Type here to start chatting...',
       idleDelayTimeMins: 3,
       isChatBubbleAvatarVisible: true,
+      headerStyle: 'default', // 'default', 'header1'
       isFeedbackModalTriggeredOnClose: true,
+      isFeedbackForced: false,
       isFeedbackButtonVisible: true,
       idleMessageTitle: 'You have been away for awhile...',
       idleMessageBody: 'Would you like to continue the session?',
@@ -48,7 +30,6 @@
       bubbleEntryTransition: 'fade-up', // slide-right, fade-up
       isAutocompleteOn: true,
       autocompleteQueryMinLength: 2,
-      botAvatarImageUrl: '', // specified by external context (chatapp's index.html)
 
       // feedback config
       feedbackMessage: '👋 Did this help?',
@@ -76,20 +57,33 @@
       // Chat Detail Options
       isDetailImgRounded: true,
       isSingleTitleLarge: true,
-      isStickyActionBtn: false,
-
-      merge: function (overideObj) {
-        config.appOptions = merge(config.appOptions, overideObj);
-      },
-
-      get: function () {
-        return config.appOptions;
-      }
+      isStickyActionBtn: false
     }
   };
 
+  // helper fn to merge objects
+  var merge = function (defaultObj, overideObj) {
+    var result = {};
+    for (var key in defaultObj) result[key] = defaultObj[key];
+    for (var key in overideObj) {
+      if (angular.isDefined(overideObj[key]) && overideObj[key] !== '') {
+        result[key] = overideObj[key];
+      }
+    }
+    return result;
+  };
+
+  // merge the config, if it is found on the window context
+  var envConfig = window.__envConfig
+    ? merge(config.envConfig, window.__envConfig)
+    : config.envConfig;
+
+  var appOptions = window.__appOptions
+    ? merge(config.appOptions, window.__appOptions)
+    : config.appOptions;
+
   angular
     .module('iconverse')
-    .constant('EnvConfig', config.envConfig)
-    .constant('AppOptions', config.appOptions);
+    .constant('EnvConfig', envConfig)
+    .constant('AppOptions', appOptions);
 }());

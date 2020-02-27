@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"
-    />
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    <link
-      href="https://fonts.googleapis.com/css?family=Hind+Siliguri:400,500,700"
-      rel="stylesheet"
-    />
+    <link rel="manifest" href="manifest.json">
 
-    <script id='env' src='env.js'></script>
+    <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri:400,500,700" rel="stylesheet">
+
+    <!-- Options to override default settings, declared inside app.constants.js -->
+        <script id='env' src='env.js'></script>
+<script src="app.options.js"></script>
+
+    <script src="https://maps.google.com/maps/api/js?region=SG&key=AIzaSyADy92GHE5GpGp8ccbYHH9GZA2Lkgbyeo0&libraries=places,geometry"></script>
 
     <!-- build:css styles/app.css -->
     <!-- compiled css output -->
-    <link rel="stylesheet" href="lib/angular-ui-swiper/dist/angular-ui-swiper.css" />
+      <link rel="stylesheet" href="lib/angular-ui-swiper/dist/angular-ui-swiper.css">
     <!-- inject:css -->
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="js/common/components/angular-input-stars/angular-input-stars.css">
-    <link rel="stylesheet" href="js/navigator/components/ion-google-place/ion-place-autocomplete.css">
-    <!-- endinject -->
+      <link rel="stylesheet" href="css/angular-tooltips.min.css">
+      <link rel="stylesheet" href="css/main.css">
+      <link rel="stylesheet" href="css/main.min.css">
+      <link rel="stylesheet" href="js/common/components/angular-input-stars/angular-input-stars.css">
+      <link rel="stylesheet" href="js/navigator/components/ion-google-place/ion-place-autocomplete.css">
+      <link rel="stylesheet" href="css/autogen-client-styles.css">
+      <!-- endinject -->
     <!-- endbuild -->
 
     <!-- build:js scripts/app.js -->
     <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic/js/ionic.bundle.min.js"></script>
     <script src="lib/angular-scroll-glue/src/scrollglue.js"></script>
     <script src="lib/lodash/dist/lodash.min.js"></script>
     <script src="lib/angular-input-stars-directive/angular-input-stars.js"></script>
@@ -35,8 +38,10 @@
     <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
     <script src="lib/moment/min/moment.min.js"></script>
     <script src="lib/angular-animate/angular-animate.min.js"></script>
+    <script src="lib/angular-tooltips/dist/angular-tooltips.min.js"></script>
     <script src="lib/msr/MediaStreamRecorder.js"></script>
     <script src="lib/angular-ui-swiper/dist/angular-ui-swiper.min.js"></script>
+    <script src="lib/angular-click-outside/clickoutside.directive.js"></script>
 
     <!-- inject:js -->
     <script src="js/navigator/navigator.module.js"></script>
@@ -57,11 +62,11 @@
     <script src="js/common/services/livechat.service.js"></script>
     <script src="js/common/services/chat-event-emitter.service.js"></script>
     <script src="js/common/services/audio-streaming.service.js"></script>
-    <script src="js/common/directives/angular-click-outside.js"></script>
     <script src="js/common/components/compile.directive.js"></script>
     <script src="js/chat/idle.service.js"></script>
     <script src="js/chat/iconverse.service.js"></script>
     <script src="js/chat/external-link-iframe.controller.js"></script>
+    <script src="js/chat/external-link.service.js"></script>
     <script src="js/chat/directives/compile.directive.js"></script>
     <script src="js/chat/components/voice-visualization/voice-visualization.directive.js"></script>
     <script src="js/chat/components/voice-recognition/voice-recognition.directive.js"></script>
@@ -71,7 +76,6 @@
     <script src="js/chat/components/chat-detail-panel/chat-detail-panel.component.js"></script>
     <script src="js/chat/components/chat-bubble.directive.js"></script>
     <script src="js/chat/components/autocomplete-suggestions/autocomplete-suggestions.directive.js"></script>
-    <script src="js/chat/chat-web-fallback.controller.js"></script>
     <script src="js/chat/chat-detail.controller.js"></script>
     <script src="js/chat/chat.state.js"></script>
     <script src="js/chat/chat.service.js"></script>
@@ -84,6 +88,7 @@
     <script src="js/app.config.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
+
   </head>
 
   <body ng-app="starter">

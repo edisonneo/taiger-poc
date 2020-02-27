@@ -1,23 +1,23 @@
-## Converse Chat UI
+## iConverse Chat UI
 This project consists of 3 main components:
 - `chat-app`: The chat interface, on which users can message with the VA
 - `context`: The client specific host context page where an iframe will be created, which points to `chat-app`
 - `widget`: The JS and assets needed to init the button, iframe and their CSS on any given host context page
 
 ### 1. Setup
-- The chat-app is actually an AngularJS + IonicJS Webapp.
-- Download the project's dependencies
+- The chat-app is actually an AngularJS + IonicJS Webapp. 
+- Download the project's dependencies 
 ```
 cd chat/chat-app
-yarn
+yarn && bower install
 ```
 
-### 2. Development
+### 2. Development 
 There are two options for hosting the chat interface.
 
 **a) Serve using Gulp + BrowserSync**
-- This is suitable if you do not have the Converse backend running, and want to make modifications to the Chat-UI only. Of course, this will require that an Converse backend is running in the cloud
-- To install the required node dependencies,
+- This is suitable if you do not have the iConverse backend running, and want to make modifications to the Chat-UI only. Of course, this will require that an iConverse backend is running in the cloud 
+- To install the required node dependencies, 
 ```
 cd iconverse-ui
 yarn
@@ -53,14 +53,14 @@ cd ..
 
 # Deploy the widget assets only
 ./deploy.sh chat-assets
-
+ 
 # Deploy chat-app, widget and client context (for previewing)
 ./deploy.sh chat-all
 ```
 
 
 ### 4. Create minified insert script for use in client host page
-- Create the minified and uglified insertion JS code with the `minify` gulp task
+- Create the minified and uglified insertion JS code with the `minify` gulp task 
 ```
 gulp minify
 ```

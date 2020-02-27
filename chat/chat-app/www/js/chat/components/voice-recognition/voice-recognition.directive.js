@@ -257,7 +257,7 @@
           scope.textInput = ''; // clear visual aid
           scope.onTextInputChanged();
 
-          console.log('Sending to converse server: ' + input);
+          console.log('Sending to iconverse server: ' + input);
 
           ChatService.processUserMessage(
             input,

@@ -16,10 +16,11 @@
     </div>
   </div>
   <!-- START: Main App Content -->
-  <ion-side-menu-content ng-if="!app.isShowLandingPage">
+  <!-- Use ng-show here to load the element, as the chat controller need to load immediate to restore past messages -->
+  <ion-side-menu-content ng-show="!app.isShowLandingPage">
 
     <!-- HEADER: DEFAULT (MAIN) -->
-    <div ng-if="!app.isDetailView" class="bar bar-brand fade-in-down">
+    <div ng-if="app.appOptions.headerStyle === 'default' && !app.isDetailView" class="bar bar-brand fade-in-down">
       <!-- TITLE -->
       <span class="bar-brand__title pop-in animation-delay">{{ app.appOptions.appName }}</span>
 
@@ -96,7 +97,7 @@
             </svg>
             <span>Restart Conversation</span>
           </a>
-          <a
+          <!-- <a
             ng-if="app.appOptions.isFeedbackButtonVisible"
             id="openFeedbackBtn"
             ng-click="app.initFeedbackModalFromDropdown()"
@@ -112,20 +113,6 @@
             </svg>
             <span>Rate this Conversation</span>
           </a>
-
-          <a
-            ng-if="!app.checkIsWebView()"
-            id="printChatLogBtn"
-            ng-click="app.printChatLog()"
-          >
-            <svg class="mr-10" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="print_24px">
-              <path id="icon/action/print_24px" fill-rule="evenodd" clip-rule="evenodd" d="M19 8H18V3H6V8H5C3.34 8 2 9.34 2 11V17H6V21H18V17H22V11C22 9.34 20.66 8 19 8ZM8 5H16V8H8V5ZM16 19V17V15H8V19H16ZM18 15V13H6V15H4V11C4 10.45 4.45 10 5 10H19C19.55 10 20 10.45 20 11V15H18ZM17 11.5C17 10.9477 17.4477 10.5 18 10.5C18.5523 10.5 19 10.9477 19 11.5C19 12.0523 18.5523 12.5 18 12.5C17.4477 12.5 17 12.0523 17 11.5Z" fill="#404040"/>
-              </g>
-            </svg>
-            <span>Print Chat Log</span>
-          </a>
-
           <a
             ng-if="app.isLivechatAvailable && app.appOptions.isShowLiveChatButton"
             id="openLivechatBtn"
@@ -143,15 +130,15 @@
                 M27.75,20.323c0,0.538-0.548,0.703-1.177,0.703H5.163c-0.629,0-1.413-0.165-1.413-0.703V7.347c0-0.539,0.784-1.321,1.413-1.321
                 h21.41c0.629,0,1.177,0.782,1.177,1.321V20.323z"/>
             </svg>
-            <span>Talk to Operator</span>
-          </a>
+            <span>Open Livechat</span>
+          </a> -->
         </div>
       </div>
 
       <!-- Close button -->
       <a
         id="closeChatBtn"
-        ng-if="!app.checkIsWebView() && app.checkIsMobile()"
+        ng-if="app.checkIsMobile()"
         ng-click="app.onCloseChatButtonClick()"
         class="button icon button-clear pop-in animation-delay--xs"
       >
@@ -163,7 +150,7 @@
 
     <!-- HEADER: DEFAULT (DETAIL) -->
     <div
-      ng-if="app.isDetailView" class="bar bar-brand fade-in-down"
+      ng-if="app.appOptions.headerStyle === 'default' && app.isDetailView" class="bar bar-brand fade-in-down"
     >
       <a
         id="backBtn"
@@ -184,7 +171,7 @@
       <!-- Close button -->
       <a
         id="closeChatBtn"
-        ng-if="!app.checkIsWebView() && app.checkIsMobile()"
+        ng-if="app.checkIsMobile()"
         ng-click="app.onCloseChatButtonClick()"
         class="button icon button-clear pop-in animation-delay--xs"
       >

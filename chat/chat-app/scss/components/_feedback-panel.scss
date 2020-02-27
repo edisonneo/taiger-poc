@@ -35,36 +35,17 @@ feedback-panel {
     justify-content: center;
     width: 100%;
   }
-  .feedback-panel__rating-container {
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      .feedback-panel__rating-left {
-        display: inline-block;
-        float: left;
-      }
-      .feedback-panel__rating-right {
-        display: inline-block;
-        float: right;
-      }
-    }
-    .feedback-panel__click-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
   .feedback-panel__stars {
     display: inline-block;
     position: relative;
-    margin: 0px 0px 0px 0px;
+    margin: 0px 12px 0px 0px;
+    font-size: 50px;
     label {
       position: absolute;
       top: 0;
       left: 0;
       height: 100%;
       cursor: pointer;
-      font-size: 36px;
       &:last-child {
         position: static;
       }

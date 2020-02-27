@@ -1,7 +1,7 @@
 (function () {
   var env = window.__env || {};
   var bot = env.bot;
-  var serverUrl = 'https://sposgva-dev.taiger.io/iconverse-admin';
+  var serverUrl = env.serverUrl;
   var chatBaseUrl = env.chatBaseUrl;
 
   /**
@@ -12,12 +12,18 @@
    */
   function Utils (config) {
     this.bot = config.bot;
-    this.serverUrl = 'https://sposgva-dev.taiger.io/iconverse-bot-server/bots/ac884001-9226-41ca-b0c1-9ad796897a96';
+    this.serverUrl = config.serverUrl;
     this.chatBaseUrl = config.chatBaseUrl;
   }
 
   Utils.prototype.isMobile = function () {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  };
+
+  Utils.prototype.getChatAssetUrl = function () {
+    return env.chatWidgetAssetsUrl
+      ? env.chatWidgetAssetsUrl
+      : env.chatBaseUrl + 'chat/widget';
   };
 
   Utils.prototype.getBaseWidgetCssUrl = function () {
@@ -27,140 +33,11 @@
     return this.serverUrl + '/base/widget/css/chat-widget.css';
   };
 
-  Utils.prototype.getCustomWidgetCssUrl = function (time) {
-    return this.serverUrl + '/bots/' + this.bot + '/widget-css' + (time ? '?' + time : '');
-  };
-
   Utils.prototype.getChatAppUrl = function (time) {
-    var baseUrl = this.serverUrl + '/base';
-
-    if (this.chatBaseUrl) {
-      baseUrl = this.chatBaseUrl + '/chat';
-    }
-
-    return (
-      baseUrl
-      + '/chat-app/index.html?botId='
-      + this.bot
-      + '&server='
-      + this.serverUrl
-      + '/'
-      + (time ? '&t=' + time : '')
-    );
-  };
-
-  Utils.prototype.getConverseAppUrl = function () {
-    var supportedProtocols = ['http:', 'https:'];
-    var pathArray = serverUrl.split('/');
-    var protocol = pathArray[0];
-
-
-    var protocolExists = supportedProtocols.indexOf(protocol) > -1;
-    if (protocolExists) {
-      var host = pathArray[2];
-      return protocol + '//' + host + '/iconverse-converse';
-    }
-    return pathArray[0] + '/iconverse-converse';
-  };
-
-  Utils.prototype.getBotConfigUrl = function (botId, lastModifiedMillis) {
-    return (
-      serverUrl
-      + '/bots/'
-      + botId
-      + '/bot-configuration'
-      + (lastModifiedMillis ? '?' + lastModifiedMillis : '')
-    );
+    return env.chatAppUrl ? env.chatAppUrl : env.chatBaseUrl + 'chat/chat-app';
   };
 
   var utils = new Utils(env);
-
-  function APIService (config) {
-    this.bot = config.bot;
-    this.serverUrl = config.serverUrl;
-    this.chatBaseUrl = config.chatBaseUrl;
-    this.converseServerUrl = utils.getConverseAppUrl();
-  }
-
-  APIService.prototype.recordImpression = function () {
-    var data = JSON.stringify({ bot: this.bot });
-    var url = this.converseServerUrl + '/recordImpression';
-    var request = new XMLHttpRequest();
-
-    request.open('POST', url, true);
-    request.withCredentials = true;
-    request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    request.onload = function () {
-      if (request.status !== 200) {
-        throw new Error('Could not record impression');
-      }
-    };
-    request.send(data);
-  };
-
-  APIService.prototype.recordActivation = function () {
-    var request = new XMLHttpRequest();
-    var url = this.converseServerUrl + '/recordActivation';
-
-    request.open('POST', url, true);
-    request.withCredentials = true;
-    request.onload = function () {
-      if (request.status !== 200) {
-        throw new Error('Could not record activation');
-      }
-    };
-    request.send();
-  };
-
-  APIService.prototype.getLastModifiedTimestamp = function (callback) {
-    if (typeof callback === 'undefined') {
-      throw new Error('callback argument must be provided');
-    }
-
-    var request = new XMLHttpRequest();
-    var url = 'https://sposgva-dev.taiger.io/iconverse-bot-server' + '/bots/' + this.bot + '/last-modified-date?' + Date.now();
-
-    request.open('GET', url, true);
-    request.onload = function () {
-      if (request.status >= 400) {
-        throw new Error('Could not get last modified timestamp');
-      }
-
-      var data = JSON.parse(this.response);
-      if (!data.lastModifiedDate) {
-        throw new Error('Cant fetch last modified date');
-      }
-
-      return callback(data.lastModifiedDate);
-    };
-    request.send();
-  };
-
-  APIService.prototype.getBotConfig = function (timestamp, callback) {
-    var request = new XMLHttpRequest();
-    var url = utils.getBotConfigUrl(this.bot, timestamp);
-
-    request.open('GET', url, true);
-    request.onload = function () {
-      if (request.status !== 200) {
-        throw new Error('Could not record activation');
-      }
-
-      var data = null;
-      try {
-        data = JSON.parse(this.response);
-      }
-      catch (err) {
-        data = {};
-      }
-
-      return callback(data);
-    };
-    request.send();
-  };
-
-
-  var apiService = new APIService(env);
 
   /**
    * @param {object} config
@@ -180,7 +57,6 @@
     this.isOpening = false;
     this.isOpenedOnce = false;
     this.isFeedbackShowing = false;
-    this.triggerOpenTimeoutID = null;
 
     /** @property {HTMLDivElement | null} */
     this.$iframeHolder = null;
@@ -190,25 +66,20 @@
     this.$chatButton = null;
   }
 
-  ChatWidget.prototype.init = function (callback) {
+  ChatWidget.prototype.init = function () {
     this.loadAssets(function () {
-      this.setupElements(callback);
+      this.setupElements();
     }.bind(this));
   };
 
   ChatWidget.prototype.loadAssets = function (onLoaded) {
     // Load base widget css
-    var baseWidgetCssUrl = utils.getBaseWidgetCssUrl();
+    var chatAssetUrl = utils.getChatAssetUrl() + '/css/chat-widget.css';
 
     // Load custom widget css
-    var customWidgetCssUrl = utils.getCustomWidgetCssUrl(this.config.timestamp);
-    this.loadCss(customWidgetCssUrl, function (cssLink) {
-      this.loadCssBefore(baseWidgetCssUrl, cssLink, function () {
-        if (typeof onLoaded === 'function') {
-          onLoaded();
-        }
-      });
-    }.bind(this));
+    this.loadCss(chatAssetUrl, function (cssLink) {
+      onLoaded();
+    });
   };
 
   ChatWidget.prototype.loadCss = function (href, callback) {
@@ -236,41 +107,12 @@
     document.head.appendChild(cssLink);
   };
 
-  ChatWidget.prototype.loadCssBefore = function (href, refElement, callback) {
-    var cssLink = document.createElement('link');
-    cssLink.rel = 'stylesheet';
-    cssLink.type = 'text/css';
-    cssLink.href = href;
-
-    cssLink.onload = function () {
-      // Check if the chat widget has already been setup by checking for the chat btn element
-      // If setup has already been run, prevent it from running again
-      if (callback && !this.isChatWidgetLoaded()) {
-        callback(cssLink);
-      }
-    }.bind(this);
-
-    cssLink.onerror = function () {
-      // Check if the chat widget has already been setup by checking for the chat btn element
-      // If setup has already been run, prevent it from running again
-      if (callback && !this.isChatWidgetLoaded()) {
-        callback(cssLink);
-      }
-    }.bind(this);
-
-    document.head.insertBefore(cssLink, refElement);
-  };
-
-  ChatWidget.prototype.setupElements = function (callback) {
+  ChatWidget.prototype.setupElements = function () {
     var self = this;
     this.$iframeHolder = this.buildIframeHolder();
     this.$iframe = this.buildIframe(function () {
       self.$chatButton = self.buildChatButton();
       document.body.appendChild(self.$chatButton);
-
-      if (typeof callback === 'function') {
-        callback();
-      }
     });
 
     this.$iframeHolder.appendChild(this.$iframe);
@@ -343,11 +185,6 @@
       }, 3000);
     }
 
-    if (this.isOpening && !this.isOpenedOnce) {
-      this.isOpenedOnce = true;
-      apiService.recordActivation();
-    }
-
     this.$iframe.setAttribute('class', 'visible');
     this.$iframe.contentWindow.postMessage('OPEN_EVENT', '*');
   };
@@ -364,14 +201,8 @@
     var $btn = document.createElement('button');
     $btn.id = this.constants.btnCssId;
 
-    apiService.recordImpression();
-
     // toggle the iframe when click on button
     $btn.addEventListener('click', function () {
-      if (self.triggerOpenInMs != null) {
-        clearTimeout(self.triggerOpenTimeoutID);
-      }
-
       if (!self.isOpening && !self.isFeedbackShowing) {
         self.toggleOpenChat();
         self.showChatBox();
@@ -416,49 +247,24 @@
     return Boolean(document.getElementById(this.constants.btnCssId));
   };
 
-  ChatWidget.prototype.triggerOpenInMs = function (ms) {
-    var self = this;
-    this.triggerOpenTimeoutID = setTimeout(function () {
-      self.$chatButton.click();
-    }, ms);
-  };
-
   function bootstrap () {
-    apiService.getLastModifiedTimestamp(function (timestamp) {
-      if (!timestamp) {
-        throw new Error('Cannot get the timestamp');
+    var chatWidget = new ChatWidget({
+      bot: bot,
+      serverUrl: serverUrl,
+      chatBaseUrl: chatBaseUrl
+    });
+
+    chatWidget.init();
+
+    // handle chat session end - close the chat iframe
+    window.addEventListener('message', function (e) {
+      if (e.data.type === 'iconverse-end') {
+        chatWidget.hideChatBox();
       }
 
-      var chatWidget = new ChatWidget({
-        bot: bot,
-        serverUrl: serverUrl,
-        chatBaseUrl: chatBaseUrl,
-        timestamp: timestamp
-      });
-
-      apiService.getBotConfig(timestamp, function (data) {
-        var isTriggerChatUiInMsPresent = (
-          data.triggerChatUiInMs
-          && typeof data.triggerChatUiInMs === 'number'
-        );
-
-        chatWidget.init(function () {
-          if (isTriggerChatUiInMsPresent) {
-            chatWidget.triggerOpenInMs(data.triggerChatUiInMs);
-          }
-        });
-      });
-
-      // handle chat session end - close the chat iframe
-      window.addEventListener('message', function (e) {
-        if (e.data.type === 'iconverse-end') {
-          chatWidget.hideChatBox();
-        }
-
-        if (e.data.type === 'feedback-showing') {
-          chatWidget.isFeedbackShowing = true;
-        }
-      });
+      if (e.data.type === 'feedback-showing') {
+        chatWidget.isFeedbackShowing = true;
+      }
     });
   }
 

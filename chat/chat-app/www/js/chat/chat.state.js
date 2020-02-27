@@ -41,22 +41,11 @@ angular
       })
 
       .state('app.external-link-iframe', {
-        url: '/external-link-iframe?surveyUrl',
+        url: '/external-link-iframe?surveyUrl&messageId?pageCount',
         views: {
           menuContent: {
             templateUrl: 'js/chat/external-link-iframe.html',
             controller: 'ExternalLinkIframeController',
-            controllerAs: 'vm'
-          }
-        }
-      })
-
-      .state('app.chat-web-fallback', {
-        url: '/chat-web-fallback',
-        views: {
-          menuContent: {
-            templateUrl: 'js/chat/chat-web-fallback.html',
-            controller: 'ChatWebFallbackController',
             controllerAs: 'vm'
           }
         }
