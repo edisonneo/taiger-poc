@@ -11,7 +11,7 @@
   },
   "env": {
     "chatEndpoint": "/iconverse-converse",
-    "chatBaseUrl": "/ui"
+    "chatBaseUrl": ""
   },
   "context": {
     "chatButtonColor": "#444",

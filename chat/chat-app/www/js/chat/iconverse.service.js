@@ -11,7 +11,7 @@
       sendMessage: 'mocks/iconverse_api.json'
     };
 
-    var server = EnvConfig.chatEndpoint;
+    var server = "https://sposgva-dev.taiger.io/iconverse-converse";
     var botId = AppOptions.botId;
 
     var API = {
