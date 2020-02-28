@@ -168,7 +168,7 @@
   ></voice-recognition>
 
   <!-- Autocomplete Suggestion List -->
-  <!-- <autocomplete-suggestions
+  <autocomplete-suggestions
     ng-if="vm.isAutocompleteVisible && app.appOptions.isAutocompleteOn && !vm.isRecording && !vm.conversation[vm.conversation.length-1].isPromptState"
     text-input="vm.autocompleteTextInput"
     cid="vm.cid"
@@ -176,7 +176,7 @@
     query-min-length="vm.queryMinLength"
     active-suggestion="vm.activeSuggestion"
     on-select-suggestion="vm.processAutocompleteSuggestion(suggestion)"
-  ></autocomplete-suggestions> -->
+  ></autocomplete-suggestions>
 
   <!-- Show the datepicker -->
   <ion-footer-bar ng-click="vm.didSelectInput()" keyboard-attach class="bar-chat-footer">
