@@ -1095,7 +1095,7 @@ etag@^1.8.1, etag@~1.8.0:
 
 event-stream@^3.1.0, event-stream@^3.3.4:
   version "3.3.4"
-  resolved "http://registry.npmjs.org/event-stream/-/event-stream-3.3.4.tgz#4ab4c9a0f5a54db9338b4c34d86bfce8f4b35571"
+  resolved "https://registry.npmjs.org/event-stream/-/event-stream-3.3.4.tgz#4ab4c9a0f5a54db9338b4c34d86bfce8f4b35571"
   dependencies:
     duplexer "~0.1.1"
     from "~0"
@@ -1107,7 +1107,7 @@ event-stream@^3.1.0, event-stream@^3.3.4:
 
 event-stream@~3.1.0:
   version "3.1.7"
-  resolved "http://registry.npmjs.org/event-stream/-/event-stream-3.1.7.tgz#b4c540012d0fe1498420f3d8946008db6393c37a"
+  resolved "https://registry.npmjs.org/event-stream/-/event-stream-3.1.7.tgz#b4c540012d0fe1498420f3d8946008db6393c37a"
   dependencies:
     duplexer "~0.1.1"
     from "~0"
@@ -2664,8 +2664,8 @@ lodash.keys@~2.4.1:
     lodash.isobject "~2.4.1"
 
 lodash.mergewith@^4.6.0:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.1.tgz#639057e726c3afbdb3e7d42741caa8d6e4335927"
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.2.tgz#617121f89ac55f59047c7aec1ccd6654c6590f55"
 
 lodash.noop@~2.4.1:
   version "2.4.1"
@@ -3749,7 +3749,7 @@ request@^2.87.0:
 
 require-dir@^0.1.0:
   version "0.1.0"
-  resolved "http://registry.npmjs.org/require-dir/-/require-dir-0.1.0.tgz#81e01e299faf5b74c34b6594f8e5add5985ddec5"
+  resolved "https://registry.npmjs.org/require-dir/-/require-dir-0.1.0.tgz#81e01e299faf5b74c34b6594f8e5add5985ddec5"
 
 require-directory@^2.1.1:
   version "2.1.1"
@@ -4146,7 +4146,7 @@ split-string@^3.0.1, split-string@^3.0.2:
 
 split@0.2:
   version "0.2.10"
-  resolved "http://registry.npmjs.org/split/-/split-0.2.10.tgz#67097c601d697ce1368f418f06cd201cf0521a57"
+  resolved "https://registry.npmjs.org/split/-/split-0.2.10.tgz#67097c601d697ce1368f418f06cd201cf0521a57"
   dependencies:
     through "2"
 
