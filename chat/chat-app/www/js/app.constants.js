@@ -6,10 +6,10 @@
    */
   var config = {
     envConfig: {
-      chatEndpoint: 'https://sposgva-dev.taiger.io/iconverse-converse'
+      chatEndpoint: 'https://wogmva-demo.taiger.io/iconverse-converse'
     },
     appOptions: {
-      botId: "ac884001-9226-41ca-b0c1-9ad796897a96",
+      botId: "0d5bc393-c38a-c292-2944-78c2a01cc2a6",
       firstMessageTypingDelayMs: 400,
       typingDelayMs: 200,
       appName: 'iConverse',
