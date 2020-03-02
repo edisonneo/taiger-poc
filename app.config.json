@@ -32,8 +32,8 @@
     "idleMessageBody": ""
   },
   "appOverrides": {
-    "customCss": "",
-    "avatarPngImg": "",
+    "customCss": "./chat/chat-app/scss/custom/custom-style.css",
+    "avatarPngImg": "./chat/chat-app/www/img/prudential-logo.png",
     "customLandingPageScss": "",
     "customLandingPageHtml": ""
   }

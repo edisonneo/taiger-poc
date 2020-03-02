@@ -12,7 +12,7 @@
       botId: "0d5bc393-c38a-c292-2944-78c2a01cc2a6",
       firstMessageTypingDelayMs: 400,
       typingDelayMs: 200,
-      appName: 'iConverse',
+      appName: 'Converse',
       feedbackAppName: false, // Alternative name for the chatbot in the feeback panel (String/false)
       inputPlaceholder: 'Type here to start chatting...',
       idleDelayTimeMins: 3,
