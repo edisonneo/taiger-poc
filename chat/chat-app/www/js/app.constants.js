@@ -9,7 +9,7 @@
       chatEndpoint: 'https://wogmva-demo.taiger.io/iconverse-converse'
     },
     appOptions: {
-      botId: "0d5bc393-c38a-c292-2944-78c2a01cc2a6",
+      botId: "1a08883f-4ec8-439a-8a1b-57c662da2856",
       firstMessageTypingDelayMs: 400,
       typingDelayMs: 200,
       appName: 'Converse',
